@@ -92,3 +92,16 @@ assert(html.includes('branch-best'),'Best answer highlighting missing');
 assert(html.includes("branchMode==='bot'&&o[3]===Math.max"),'Only bot mode should highlight highest-scoring answers');
 for(const root of branches.roots){const node=branches.get(root.id);assert(node.choices.some(choice=>choice[3]===Math.max(...node.choices.map(x=>x[3]))))}
 console.log('OK: training and bot mode controls, best-answer selection');
+
+const trust=branches.create('first');
+assert.equal(branches.progress(trust).trust,50);
+assert.deepEqual(Array.from(branches.best('first')),[0]);
+assert.match(branches.advice('first',0),/доверие|потребност/i);
+branches.step(trust,0);
+assert.equal(branches.progress(trust).trust,80);
+const poor=branches.create('first');branches.step(poor,1);
+assert.equal(branches.progress(poor).trust,30);
+assert.match(branches.advice('first',1),/давлен|гарант/i);
+assert(html.includes('PhuketBranches.advice('));
+assert(html.includes('Доверие: '));
+console.log('OK: trust meter and coaching guidance');
