@@ -38,3 +38,12 @@ assert(coach.guidance(api.create('investor')).hint);
 assert(html.includes('src="./phuket-coach.js"'));
 assert(html.includes('id="hintbody"'));
 console.log('OK: broker hints and feedback');
+
+const conversation=api.create('investor');
+const profitability=api.respond(conversation,'Обещаете гарантированную доходность?');
+assert.match(profitability,/расчёт|расход|провер/i);
+assert.equal(Object.keys(conversation.facts).length,0);
+assert.equal(api.respond(conversation,'Для чего вы покупаете квартиру?'),api.templates.investor.goal);
+assert.match(api.respond(conversation,'Давайте назначим созвон и посмотрим подборку.'),/вариант|созвон/i);
+assert.match(api.respond(conversation,'Спасибо за ответы'),/дальше/i);
+console.log('OK: objection and next-step intents');
