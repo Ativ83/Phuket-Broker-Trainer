@@ -89,7 +89,7 @@ assert(html.includes('branchMode="training"'),'Training mode must be default');
 assert(html.includes('id="branch-bot"'),'Bot toggle missing');
 assert(html.includes('id="branch-training"'),'Training toggle missing');
 assert(html.includes('branch-best'),'Best answer highlighting missing');
-assert(html.includes("branchMode==='bot'&&o[3]===Math.max"),'Only bot mode should highlight highest-scoring answers');
+assert(html.includes("branchMode==='bot'&&PhuketBranches.best(s.node).includes(i)"),'Only bot mode should highlight highest-scoring answers');
 for(const root of branches.roots){const node=branches.get(root.id);assert(node.choices.some(choice=>choice[3]===Math.max(...node.choices.map(x=>x[3]))))}
 console.log('OK: training and bot mode controls, best-answer selection');
 
@@ -126,3 +126,9 @@ console.log('OK: large type, trust progress and demanding client');
 assert(html.includes('Новая тренировка началась.'),'Restart must confirm reset');
 assert(html.includes("branchroot').scrollIntoView"),'Restart should scroll to beginning');
 console.log('OK: restart feedback and scroll');
+
+assert(html.includes('class="bot-marker"'),'Recommended badge must be a separate UI element');
+assert(html.includes('class="broker-speech"'),'Spoken broker phrase must have separate element');
+assert(html.includes('✓ РЕКОМЕНДУЕМЫЙ ОТВЕТ'));
+assert(!html.includes("?' ✓ Рекомендуемый ответ':''"),'Badge must not be appended to broker speech');
+console.log('OK: coaching badge separated from spoken broker text');
