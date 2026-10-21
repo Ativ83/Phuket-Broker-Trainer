@@ -105,3 +105,10 @@ assert.match(branches.advice('first',1),/давлен|гарант/i);
 assert(html.includes('PhuketBranches.advice('));
 assert(html.includes('Доверие: '));
 console.log('OK: trust meter and coaching guidance');
+
+assert(html.includes('id="scriptsearch"'),'Scenario search missing');
+assert(html.includes('phuket-branch-v5'),'Local progress save missing');
+assert(html.includes('Итог переговоров'),'End of conversation summary missing');
+const lost=branches.create('first');branches.step(lost,1);assert.equal(lost.trust,30);branches.step(lost,1);assert.equal(lost.trust,0);assert.equal(lost.node,'end_bad');
+const completed=branches.summary(lost);assert.equal(completed.outcome,'Клиент потерян');assert(completed.mistakes>=2);
+console.log('OK: search, persistence, critical trust loss and debrief');
