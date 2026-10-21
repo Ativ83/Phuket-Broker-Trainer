@@ -178,3 +178,11 @@ assert(html.includes("function stats()"));
 assert(html.includes("phuket-records-v7"));
 for(const q of context.window.PhuketAcademy.questions){assert.equal(q[1].length,3);assert(q[2]>=0&&q[2]<3)}
 console.log('OK: 24 new scenarios, 20 exam questions, stats and calculator');
+
+new vm.Script(fs.readFileSync('sw.js','utf8'),{filename:'sw.js'});
+new vm.Script(fs.readFileSync('phuket-academy.js','utf8'),{filename:'phuket-academy.js'});
+const manifest=JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));
+assert.equal(manifest.display,'standalone');
+assert(html.includes('rel="manifest"'));
+assert(html.includes("serviceWorker.register('./sw.js')"));
+console.log('OK: offline PWA manifest and service worker');
