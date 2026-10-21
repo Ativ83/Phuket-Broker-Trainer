@@ -1,0 +1,18 @@
+{
+  "name": "Phuket Broker Trainer",
+  "short_name": "Phuket Trainer",
+  "description": "Тренажёр переговоров с покупателями недвижимости Пхукета",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111720",
+  "theme_color": "#151c28",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
