@@ -39,9 +39,19 @@ const nodes={
  end_neutral:{client:'Хорошо, спасибо. Возможно, вернусь позже.',choices:[]},
  end_bad:{client:'Нет, спасибо. Я прекращаю разговор.',choices:[]}
 };
-function create(root='first'){return {root:roots.some(x=>x.id===root)?root:'first',node:root,score:0,history:[],visited:[root]}}
+function create(root='first'){return {root:roots.some(x=>x.id===root)?root:'first',node:root,score:0,trust:50,history:[],visited:[root]}}
 function get(id){return roots.find(x=>x.id===id)||nodes[id]}
-function step(state,index){const node=get(state.node);if(!node||!node.choices[index])throw Error('Invalid branch choice');const choice=node.choices[index];state.score+=choice[3];state.history.push({from:state.node,choice:index,label:choice[0],delta:choice[3],to:choice[2]});state.node=choice[2];state.visited.push(state.node);return get(state.node)}
-function progress(state){return {turns:state.history.length,score:state.score,unique:new Set(state.visited).size,complete:get(state.node).choices.length===0}}
-window.PhuketBranches={roots,nodes,get,create,step,progress};
+function step(state,index){const node=get(state.node);if(!node||!node.choices[index])throw Error('Invalid branch choice');const choice=node.choices[index];state.score+=choice[3];state.trust=Math.max(0,Math.min(100,state.trust+choice[3]*10));state.history.push({from:state.node,choice:index,label:choice[0],delta:choice[3],trust:state.trust,to:choice[2]});state.node=choice[2];state.visited.push(state.node);return get(state.node)}
+function progress(state){return {turns:state.history.length,score:state.score,trust:state.trust,unique:new Set(state.visited).size,complete:get(state.node).choices.length===0}}
+function advice(id,index){
+ const node=get(id),choice=node&&node.choices[index];if(!choice)return '';
+ const delta=choice[3],to=choice[2];
+ if(delta>=3)return 'Вы уточняете потребности или предлагаете проверяемый следующий шаг. Это укрепляет доверие клиента.';
+ if(delta>=1)return 'Допустимый ход: разговор продолжается, но можно глубже выяснить потребности.';
+ if(to==='push')return 'Давление и неподтверждённые гарантии повышают риск потерять клиента.';
+ if(to==='distrust')return 'Ответ не учитывает запрос клиента. Лучше признать сомнения и задать уточняющий вопрос.';
+ return 'Клиенту пока не хватает понимания вашей пользы. Сначала уточните его задачу.';
+}
+function best(id){const node=get(id);if(!node||!node.choices.length)return [];const max=Math.max(...node.choices.map(c=>c[3]));return node.choices.map((c,i)=>c[3]===max?i:-1).filter(i=>i>=0)}
+window.PhuketBranches={roots,nodes,get,create,step,progress,advice,best};
 })();
