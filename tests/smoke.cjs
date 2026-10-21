@@ -81,3 +81,6 @@ const flow=branches.create('first');
 branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);
 assert.equal(branches.progress(flow).turns,4);
 console.log('OK: branching graph, 4 starts, all targets and outcomes');
+
+assert(html.includes("for(const t of ['scripts','dialog','branches','notes'])"),'Branching tab must have click handler');
+console.log('OK: branching tab click binding');
