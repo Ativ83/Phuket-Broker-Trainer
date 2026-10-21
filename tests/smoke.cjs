@@ -122,3 +122,7 @@ branches.step(demanding,1);
 assert.equal(demanding.trust,5);
 assert.equal(demanding.node,'end_bad');
 console.log('OK: large type, trust progress and demanding client');
+
+assert(html.includes('Новая тренировка началась.'),'Restart must confirm reset');
+assert(html.includes("branchroot').scrollIntoView"),'Restart should scroll to beginning');
+console.log('OK: restart feedback and scroll');
