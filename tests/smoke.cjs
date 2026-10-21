@@ -26,3 +26,15 @@ for(const name of Object.keys(api.templates)){
  const reset=api.create(name);assert.equal(Object.keys(reset.facts).length,0);
 }
 console.log('OK: syntax, 28 additional scripts, 3 personas, memory and reset');
+
+const coachJs=fs.readFileSync('phuket-coach.js','utf8');
+new vm.Script(coachJs,{filename:'phuket-coach.js'});
+vm.runInContext(coachJs,context);
+const coach=context.window.PhuketCoach;
+const novice=coach.evaluate('Купите срочно, гарантирую 100% доход!',api.create('investor'));
+const skilled=coach.evaluate('Скажите, для чего вы рассматриваете покупку: для жизни или инвестиций?',api.create('investor'));
+assert(skilled.score>novice.score);
+assert(coach.guidance(api.create('investor')).hint);
+assert(html.includes('src="./phuket-coach.js"'));
+assert(html.includes('id="hintbody"'));
+console.log('OK: broker hints and feedback');
