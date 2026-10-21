@@ -47,3 +47,37 @@ assert.equal(api.respond(conversation,'Для чего вы покупаете �
 assert.match(api.respond(conversation,'Давайте назначим созвон и посмотрим подборку.'),/вариант|созвон/i);
 assert.match(api.respond(conversation,'Спасибо за ответы'),/дальше/i);
 console.log('OK: objection and next-step intents');
+
+const branchJs=fs.readFileSync('phuket-branches.js','utf8');
+new vm.Script(branchJs,{filename:'phuket-branches.js'});
+vm.runInContext(branchJs,context);
+const branches=context.window.PhuketBranches;
+assert.equal(branches.roots.length,4);
+assert(Object.keys(branches.nodes).length>=15);
+assert(html.includes('tab-branches'));
+assert(html.includes('src="./phuket-branches.js"'));
+for(const root of branches.roots){
+ const start=branches.create(root.id);
+ const rootNode=branches.get(start.node);
+ assert(rootNode.choices.length>=3);
+ for(let i=0;i<rootNode.choices.length;i++){
+  const s=branches.create(root.id);
+  const target=branches.step(s,i);
+  assert(target&&typeof target.client==='string');
+  assert.equal(s.history.length,1);
+  assert.equal(s.score,rootNode.choices[i][3]);
+ }
+}
+for(const root of branches.roots){
+ const queue=[root.id],seen=new Set();
+ while(queue.length){
+  const id=queue.shift();if(seen.has(id))continue;seen.add(id);
+  const node=branches.get(id);assert(node,'Missing node: '+id);
+  for(const choice of node.choices){assert(branches.get(choice[2]),'Missing target: '+choice[2]);queue.push(choice[2])}
+ }
+ assert(seen.has('end_good')&&seen.has('end_bad'),'Both outcomes must be reachable from '+root.id);
+}
+const flow=branches.create('first');
+branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);
+assert.equal(branches.progress(flow).turns,4);
+console.log('OK: branching graph, 4 starts, all targets and outcomes');
