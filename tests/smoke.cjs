@@ -136,3 +136,12 @@ console.log('OK: coaching badge separated from spoken broker text');
 assert(html.includes('id="hintbody" class="hint-text"'));
 assert(html.includes('.hint-text{font-size:21px'));
 console.log('OK: readable broker assistant hint');
+
+assert(html.includes('class="dialog-notice"'),'Dialogue introduction must be legible');
+assert(html.includes('.dialog-notice{font-size:20px'),'Dialogue introduction should be larger');
+assert(html.includes('coach-panel'),'Coach panel should have distinct color');
+assert(html.includes('БРОКЕР · ВАШ ОТВЕТ'),'Broker messages should be clearly labeled');
+assert(html.includes('КЛИЕНТ · ВОПРОС / ОТВЕТ'),'Client messages should be clearly labeled');
+assert(html.includes('.chat .bubble.client{background:#263f52'),'Client should have a distinct background');
+assert(html.includes('.chat .bubble.me{background:#3d3625'),'Broker should have a distinct background');
+console.log('OK: large readable dialogue text and semantic color separation');
