@@ -50,9 +50,10 @@ console.log('OK: objection and next-step intents');
 
 const branchJs=fs.readFileSync('phuket-branches.js','utf8');
 new vm.Script(branchJs,{filename:'phuket-branches.js'});
+vm.runInContext(fs.readFileSync('phuket-academy.js','utf8'),context);
 vm.runInContext(branchJs,context);
 const branches=context.window.PhuketBranches;
-assert.equal(branches.roots.length,4);
+assert.equal(branches.roots.length,28);
 assert(Object.keys(branches.nodes).length>=15);
 assert(html.includes('tab-branches'));
 assert(html.includes('src="./phuket-branches.js"'));
@@ -164,3 +165,24 @@ assert.match(branches.view(prior).client,/уже обсуждали/);
 assert(html.includes('Что помнит клиент'));
 assert(html.includes('PhuketBranches.view(s)'));
 console.log('OK: conversation memory, varied repeat playthrough and trust-sensitive closing');
+
+assert.equal(context.window.PhuketAcademy.questions.length,20);
+assert.equal(context.window.PhuketAcademy.roots.length,24);
+assert(html.includes('src="./phuket-academy.js"'));
+assert(html.includes('id="tab-exam"'));
+assert(html.includes('id="tab-stats"'));
+assert(html.includes('id="tab-calc"'));
+assert(html.includes("function exam()"));
+assert(html.includes("function calc()"));
+assert(html.includes("function stats()"));
+assert(html.includes("phuket-records-v7"));
+for(const q of context.window.PhuketAcademy.questions){assert.equal(q[1].length,3);assert(q[2]>=0&&q[2]<3)}
+console.log('OK: 24 new scenarios, 20 exam questions, stats and calculator');
+
+new vm.Script(fs.readFileSync('sw.js','utf8'),{filename:'sw.js'});
+new vm.Script(fs.readFileSync('phuket-academy.js','utf8'),{filename:'phuket-academy.js'});
+const manifest=JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));
+assert.equal(manifest.display,'standalone');
+assert(html.includes('rel="manifest"'));
+assert(html.includes("serviceWorker.register('./sw.js')"));
+console.log('OK: offline PWA manifest and service worker');
