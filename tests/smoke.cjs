@@ -112,3 +112,13 @@ assert(html.includes('Итог переговоров'),'End of conversation sum
 const lost=branches.create('first');branches.step(lost,1);assert.equal(lost.trust,30);branches.step(lost,1);assert.equal(lost.trust,0);assert.equal(lost.node,'end_bad');
 const completed=branches.summary(lost);assert.equal(completed.outcome,'Клиент потерян');assert(completed.mistakes>=2);
 console.log('OK: search, persistence, critical trust loss and debrief');
+
+assert(html.includes('font:19px/1.55'),'Larger body font required');
+assert(html.includes('branchdifficulty'),'Difficulty selector missing');
+assert(html.includes('aria-label="Доверие клиента"'),'Trust progress bar missing');
+const demanding=branches.create('first','hard');
+assert.equal(demanding.trust,35);
+branches.step(demanding,1);
+assert.equal(demanding.trust,5);
+assert.equal(demanding.node,'end_bad');
+console.log('OK: large type, trust progress and demanding client');
