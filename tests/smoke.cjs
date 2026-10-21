@@ -145,3 +145,22 @@ assert(html.includes('КЛИЕНТ · ВОПРОС / ОТВЕТ'),'Client messag
 assert(html.includes('.chat .bubble.client{background:#263f52'),'Client should have a distinct background');
 assert(html.includes('.chat .bubble.me{background:#3d3625'),'Broker should have a distinct background');
 console.log('OK: large readable dialogue text and semantic color separation');
+
+const memoryRun=branches.create('first','normal',1);
+branches.step(memoryRun,0);
+assert(branches.memoryOf(memoryRun).topics.includes('goal'));
+assert.equal(branches.progress(memoryRun).topics,1);
+assert.match(branches.view(memoryRun).client,/Уточню ещё один момент/);
+const repeat=branches.create('first','normal',2);
+branches.step(repeat,0);
+assert.notEqual(branches.view(repeat).client,branches.view(memoryRun).client);
+const cautious=branches.create('first','normal');
+cautious.node='selection';cautious.trust=30;
+branches.step(cautious,0);
+assert.equal(cautious.node,'distrust','Low trust should block an easy closing');
+const prior=branches.create('first','normal');
+prior.node='goal';prior.visited=['first','goal','budget','goal'];prior.history=[{delta:2}];
+assert.match(branches.view(prior).client,/уже обсуждали/);
+assert(html.includes('Что помнит клиент'));
+assert(html.includes('PhuketBranches.view(s)'));
+console.log('OK: conversation memory, varied repeat playthrough and trust-sensitive closing');
