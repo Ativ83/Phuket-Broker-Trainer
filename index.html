@@ -63,6 +63,6 @@ function calc(){
  app.querySelectorAll('.calc-input').forEach(x=>x.oninput=update);update();
 }
 function notes(){app.innerHTML='<article><h2>Памятка брокера</h2><ul><li>Сначала уточняйте цель, бюджет, сроки и отношение к рискам.</li><li>Сравнивайте районы под конкретный образ жизни покупателя.</li><li>Показывайте полную стоимость владения, управление, налоги и возможные простои.</li><li>Не обещайте гарантированную доходность без документального основания.</li><li>Правила владения кондоминиумом и землёй иностранцами различаются.</li><li>Документы и договор должен проверять независимый специалист в Таиланде.</li><li>Не давите на клиента; согласовывайте следующий шаг.</li></ul></article>'}
-for(const t of ['scripts','dialog','branches','notes'])document.getElementById('tab-'+t).onclick=()=>tab(t);tab('scripts');
+for(const t of ['scripts','dialog','branches','exam','stats','calc','notes'])document.getElementById('tab-'+t).onclick=()=>tab(t);tab('scripts');
 if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script></body></html>
