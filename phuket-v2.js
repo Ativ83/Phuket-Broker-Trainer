@@ -31,15 +31,25 @@ function respond(state,message){
  const profile=templates[state.persona];
  if(!text)return 'Не расслышал вопрос. Можете повторить?';
  let answer;
- const matched=patterns.find(([key,re])=>re.test(text));
- if(matched){
-  const key=matched[0];state.asked[key]=(state.asked[key]||0)+1;
-  if(state.facts[key])answer=state.asked[key]>2?'Мы уже обсуждали это. Давайте двигаться дальше.':'Как я говорил: '+state.facts[key];
-  else{state.facts[key]=profile[key];answer=profile[key]}
- }else{
-  const objection=objections.find(([re])=>re.test(text));
-  answer=objection?objection[1]:fallback[(state.turn+({investor:0,family:2,skeptic:4}[state.persona]||0))%fallback.length];
- }
+ const objection=objections.find(([re])=>re.test(text));
+ const askingBudget=/бюджет|сумм|сколько.*(готов|рассчитыва)|финанс/.test(text);
+ const askingGoal=/для чего|цель|зачем|для себя|для жизни|для инвестиц|как.*использова/.test(text);
+ const askingArea=/район|локац|пляж|инфраструктур|где.*(жить|искать)|какое место/.test(text);
+ const askingTerm=/срок|когда.*(покуп|решен|планиру)|как скоро|к какому времени/.test(text);
+ const askingRisk=/риск|опасен|беспоко|смуща|сомнен|довер|пережива|опасает/.test(text);
+ const requested=askingBudget?'budget':askingGoal?'goal':askingArea?'area':askingTerm?'term':askingRisk?'risk':null;
+ if(objection && !requested)answer=objection[1];
+ else if(requested){
+  const key=requested;state.asked[key]=(state.asked[key]||0)+1;
+  if(state.facts[key]){
+   answer=state.asked[key]>2?'Я уже рассказывал об этом. Давайте лучше обсудим другие условия.':'Да, верно. '+state.facts[key];
+  }else{
+   state.facts[key]=profile[key];answer=profile[key];
+  }
+ }else if(/спасибо|благодар/.test(text))answer='Спасибо. Что вы предлагаете сделать дальше?';
+ else if(/встреч|созвон|презентац|покаж|подборк/.test(text))answer='Хорошо. Пришлите два-три варианта с полной стоимостью и документами, потом договоримся о созвоне.';
+ else if(/гарант|доходност|процент/.test(text))answer='Как подтверждаются расчёты доходности и какие расходы учтены?';
+ else answer=fallback[(state.turn+({investor:0,family:2,skeptic:4}[state.persona]||0))%fallback.length];
  state.turn++;state.history.push({broker:message,client:answer});return answer;
 }
 window.PhuketV2={extra,templates,create,respond};
