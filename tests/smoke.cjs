@@ -132,3 +132,7 @@ assert(html.includes('class="broker-speech"'),'Spoken broker phrase must have se
 assert(html.includes('✓ РЕКОМЕНДУЕМЫЙ ОТВЕТ'));
 assert(!html.includes("?' ✓ Рекомендуемый ответ':''"),'Badge must not be appended to broker speech');
 console.log('OK: coaching badge separated from spoken broker text');
+
+assert(html.includes('id="hintbody" class="hint-text"'));
+assert(html.includes('.hint-text{font-size:21px'));
+console.log('OK: readable broker assistant hint');
