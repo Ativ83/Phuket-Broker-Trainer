@@ -126,3 +126,9 @@ console.log('OK: large type, trust progress and demanding client');
 assert(html.includes('Новая тренировка началась.'),'Restart must confirm reset');
 assert(html.includes("branchroot').scrollIntoView"),'Restart should scroll to beginning');
 console.log('OK: restart feedback and scroll');
+
+assert(html.includes('class="bot-marker"'),'Recommended badge must be a separate UI element');
+assert(html.includes('class="broker-speech"'),'Spoken broker phrase must have separate element');
+assert(html.includes('✓ РЕКОМЕНДУЕМЫЙ ОТВЕТ'));
+assert(!html.includes("?' ✓ Рекомендуемый ответ':''"),'Badge must not be appended to broker speech');
+console.log('OK: coaching badge separated from spoken broker text');
