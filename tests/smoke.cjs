@@ -207,30 +207,46 @@ new vm.Script(knowledgeJs,{filename:'phuket-knowledge.js'});
 new vm.Script(knowledgeUi,{filename:'phuket-knowledge-ui.js'});
 vm.runInContext(knowledgeJs,context);
 const knowledge=context.window.PhuketKnowledge;
-assert.equal(knowledge.lessons.length,4);
+assert.equal(knowledge.lessons.length,8);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.number),[1,2,3,4,9,10,15,16]);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.step),[1,1,1,1,4,4,6,6]);
 assert.deepEqual(Array.from(knowledge.lessons,l=>l.title),[
  'Пхукет',
  'Формы собственности',
  'Процедура заключения сделки:',
- 'Процедура заключения сделки:'
+ 'Процедура заключения сделки:',
+ 'Форматы управления недвижимостью',
+ 'Арендные программы',
+ 'Капитализация и доходность на примере реальных кейсов',
+ 'Самые актуальные проекты 2024-2025 г.'
 ]);
 assert.deepEqual(Array.from(knowledge.lessons,l=>l.video),[
  'https://youtu.be/9tK4cXrw1jk',
  'https://youtu.be/FNtDBQaPTmA',
  'https://youtu.be/befMirUiHGU',
- 'https://youtu.be/bcQMu_HnsW8'
+ 'https://youtu.be/bcQMu_HnsW8',
+ 'https://youtu.be/574FFikQlpA',
+ 'https://youtu.be/fhSrvjgnCf8',
+ 'https://youtu.be/2vUCwVGUsbs',
+ 'https://youtu.be/nk5QUyjjX8g'
 ]);
-assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),11);
+assert.deepEqual(Array.from(knowledge.lessons,l=>Boolean(l.videoAnalyzed)),[false,false,false,false,true,true,true,true]);
+assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),27);
 for(const lesson of knowledge.lessons){
  assert(lesson.video.startsWith('https://youtu.be/'));
  assert(lesson.sources.length>0);
  assert(lesson.facts.length>=3);
  assert(lesson.quiz.every(q=>q[2]>=0&&q[2]<q[1].length));
 }
-assert(knowledge.sourceNote.includes('ещё не расшифровано'));
+assert(knowledge.sourceNote.includes('расшифровки этих роликов ещё не получены'));
 assert(html.includes('id="tab-knowledge"'));
 assert(html.includes('src="./phuket-knowledge.js"'));
 assert(html.includes('src="./phuket-knowledge-ui.js"'));
 assert(html.includes('PhuketKnowledgeUI.renderList(app)'));
 assert(fs.readFileSync('sw.js','utf8').includes("'./phuket-knowledge-ui.js'"));
-console.log('OK: verified-source knowledge base, four video references, 11 quizzes, offline cache');
+assert(knowledge.lessons[7].facts.some(x=>x[1].includes('2024')));
+assert(knowledge.lessons[4].facts.some(x=>x[1].includes('5%')));
+assert(knowledge.lessons[5].facts.some(x=>x[1].includes('Hotel Act')));
+assert(knowledgeUi.includes('kb-step-title'));
+assert(knowledgeUi.includes('l.number'));
+console.log('OK: four new transcript lessons, eight correctly numbered videos, 27 quizzes, offline cache');
