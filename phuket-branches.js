@@ -58,11 +58,23 @@ function view(state){
   else if(v===1)prefix='Уточню ещё один момент. ';
   else if(v===2)prefix='Для меня это действительно важно. ';
  }
- return {client:prefix+base.client,choices:base.choices};
+ const persona=state.difficulty==='hard'?'Требовательный покупатель':'Покупатель';
+ const pressure=m.pressure>=2?'Сильное раздражение':m.pressure===1?'Настороженность':'Без давления';
+ return {client:prefix+base.client,choices:base.choices,persona,pressure};
 }
 function step(state,index){const node=get(state.node);if(!node||!node.choices[index])throw Error('Invalid branch choice');const choice=node.choices[index];const trustBefore=state.trust;state.score+=choice[3];state.trust=Math.max(0,Math.min(100,state.trust+choice[3]*(state.difficulty==='hard'&&choice[3]<0?15:10)));const m=memoryOf(state);const topic=choice[2];if(!m.topics.includes(topic))m.topics.push(topic);if(choice[3]<0)m.pressure++;if(choice[3]>=2)m.assurances++;state.memory=m;
  const from=state.node;state.history.push({from,choice:index,label:choice[0],delta:choice[3],trust:state.trust,to:choice[2]});state.node=choice[2];
  if(state.node==='end_good'&&trustBefore<40)state.node='distrust';if(state.trust<=10&&state.node!=='end_good'&&state.node!=='end_neutral')state.node='end_bad';state.visited.push(state.node);return get(state.node)}
+function review(state){
+ const errors=state.history.filter(h=>h.delta<0).map(h=>{
+ const node=get(h.from),idx=best(h.from)[0],correct=node&&node.choices[idx];
+ return {question:node?node.client:'',your:node&&node.choices[h.choice]?node.choices[h.choice][1]:h.label,better:correct?correct[1]:'Уточните потребности клиента.',why:advice(h.from,h.choice),delta:h.delta};
+ });
+ const strengths=state.history.filter(h=>h.delta>=2).length;
+ const topics=memoryOf(state).topics;
+ const focus=errors.some(x=>/давлен|гарант/i.test(x.why))?'Работа с возражениями без давления':errors.length?'Выявление потребностей и проверка фактов':topics.length<3?'Уточнение цели, бюджета и рисков':'Согласование следующего шага';
+ return {errors,strengths,focus,grade:state.node==='end_good'?'Сделка продвинулась':state.node==='end_bad'?'Клиент потерян':'Требуется продолжение'};
+}
 function summary(state){const p=progress(state);const positives=state.history.filter(h=>h.delta>0).length;const mistakes=state.history.filter(h=>h.delta<0).length;return {outcome:state.node==='end_good'?'Успешный следующий шаг':state.node==='end_bad'?'Клиент потерян':state.node==='end_neutral'?'Контакт сохранён': 'Переговоры продолжаются',positives,mistakes,tip:mistakes?'Обратите внимание на шаги с отрицательной оценкой: избегайте давления и проверяйте потребности.':'Продолжайте уточнять критерии и подтверждать следующий шаг.'}}
 function progress(state){return {turns:state.history.length,score:state.score,trust:state.trust,unique:new Set(state.visited).size,complete:get(state.node).choices.length===0,topics:memoryOf(state).topics.length}}
 function advice(id,index){
@@ -75,5 +87,5 @@ function advice(id,index){
  return 'Клиенту пока не хватает понимания вашей пользы. Сначала уточните его задачу.';
 }
 function best(id){const node=get(id);if(!node||!node.choices.length)return [];const max=Math.max(...node.choices.map(c=>c[3]));return node.choices.map((c,i)=>c[3]===max?i:-1).filter(i=>i>=0)}
-window.PhuketBranches={roots,nodes,get,view,memoryOf,create,step,progress,summary,advice,best};
+window.PhuketBranches={roots,nodes,get,view,memoryOf,create,step,progress,summary,review,advice,best};
 })();
