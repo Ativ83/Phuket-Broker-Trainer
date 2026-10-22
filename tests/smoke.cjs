@@ -342,9 +342,11 @@ assert(html.includes('src="./phuket-themes.js"'));
 assert(html.includes("PhuketThemes.renderPicker(app)"));
 assert(html.includes("PhuketThemes.applySaved()"));
 assert(html.includes(".theme-picker-grid"));
-assert(html.includes('phuket-paradise.svg'));
-assert(fs.readFileSync("sw.js","utf8").includes("'./phuket-paradise.svg'"));
-assert(fs.readFileSync("phuket-paradise.svg","utf8").includes("<svg"));
+assert(html.includes('phuket-paradise-photo.avif'));
+assert(fs.readFileSync("sw.js","utf8").includes("'./phuket-paradise-photo.avif'"));
+assert(fs.readFileSync("phuket-paradise-photo.avif").includes(Buffer.from("ftypavif")));
+assert(fs.statSync("phuket-paradise-photo.avif").size>30000);
+assert(!html.includes("url(\"./phuket-paradise.svg\")"));
 assert(fs.readFileSync("phuket-paradise.svg","utf8").includes("viewBox"));
 
-console.log("OK: four saved themes, accessible picker, scenic toggle, scenic SVG and offline caching");
+console.log("OK: four saved themes, photo-realistic selected background, picker, scenic toggle and offline caching");
