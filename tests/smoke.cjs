@@ -357,4 +357,18 @@ assert(fs.statSync("phuket-paradise-photo.avif").size>30000);
 assert(!html.includes("url(\"./phuket-paradise.svg\")"));
 assert(fs.readFileSync("phuket-paradise.svg","utf8").includes("viewBox"));
 
+
+for(const name of ["phuket-sunset-gold.avif","phuket-classic-night.avif"]){
+ const bytes=fs.readFileSync(name);
+ assert(bytes.includes(Buffer.from("ftypavif")),name+" is AVIF");
+ assert(bytes.byteLength>25000,name+" needs valid image payload");
+ assert(html.includes('url("./'+name+'")'),name+" must be in CSS");
+ assert(fs.readFileSync("sw.js","utf8").includes("'./"+name+"'"),name+" must be cached");
+}
+assert(html.includes(':root[data-theme="sunset"][data-scenic="true"] header'));
+assert(html.includes(':root[data-theme="classic"][data-scenic="true"] header'));
+assert(html.includes(':root[data-theme="classic"][data-scenic="true"] body::before'));
+assert(html.includes(':root[data-theme="classic"][data-scenic="true"] #hero-theme-tagline'));
+assert(fs.readFileSync("sw.js","utf8").includes("phuket-trainer-photographic-skins-v21"));
+console.log("OK: both Sunset Gold and Classic Dark have offline photoreal resort skins");
 console.log("OK: four saved themes, photo-realistic selected background, picker, scenic toggle and offline caching");

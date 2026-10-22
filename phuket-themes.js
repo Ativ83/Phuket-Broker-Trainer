@@ -2,10 +2,10 @@
 "use strict";
 const KEY="phuket-trainer-appearance-v1";
 const themes=[
- {id:"classic",name:"Classic Dark",label:"Привычный строгий стиль",caption:"Максимальная концентрация",tagline:"Тренируйте навыки. Заключайте уверенные сделки."},
+ {id:"classic",name:"Classic Dark",label:"Привычный строгий стиль",caption:"Лунная ночь, огни виллы и подсвеченный бассейн",tagline:"Тренируйте навыки. Заключайте уверенные сделки."},
  {id:"thai",name:"Thai Paradise",label:"Пхукет · мечта · новые возможности",caption:"Пальмы, острова, бирюзовое море и золотой свет",tagline:"Каждая тренировка — шаг к мечте о Пхукете."},
  {id:"ocean",name:"Business Ocean",label:"Премиальный деловой океан",caption:"Глубокий синий, бирюза, уверенность",tagline:"Знания превращаются в уверенные решения."},
- {id:"sunset",name:"Sunset Gold",label:"Золотой час на берегу",caption:"Тёплый закат, бронза, вдохновение",tagline:"Большие цели начинаются с ежедневного шага."}
+ {id:"sunset",name:"Sunset Gold",label:"Золотой час на берегу",caption:"Настоящий закат, роскошная терраса и море",tagline:"Большие цели начинаются с ежедневного шага."}
 ];
 function normalize(value){
  const theme=themes.some(t=>t.id===value?.theme)?value.theme:"thai";

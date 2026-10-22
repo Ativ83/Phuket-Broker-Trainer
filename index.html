@@ -275,6 +275,36 @@
  :root[data-theme] *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }
 
+
+/* Resort photographs for Sunset Gold and Classic Dark */
+:root[data-theme="sunset"][data-scenic="true"] body::before{
+ background:linear-gradient(180deg,rgba(35,19,41,.40),rgba(33,18,40,.90) 84%),url("./phuket-sunset-gold.avif") center 56% / cover no-repeat;
+ opacity:.94;
+}
+:root[data-theme="sunset"][data-scenic="true"] header{
+ min-height:282px;padding-top:75px;padding-bottom:32px;
+ background:linear-gradient(90deg,rgba(39,22,44,.88),rgba(57,27,46,.49) 70%,rgba(66,31,47,.20)),url("./phuket-sunset-gold.avif") center 68% / cover no-repeat;
+}
+:root[data-theme="classic"][data-scenic="true"] body{isolation:isolate;min-height:100vh}
+:root[data-theme="classic"][data-scenic="true"] body::before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+ background:linear-gradient(180deg,rgba(8,16,27,.58),rgba(8,16,27,.93) 83%),url("./phuket-classic-night.avif") center 58% / cover no-repeat;
+}
+:root[data-theme="classic"][data-scenic="true"] header{
+ min-height:275px;padding-top:74px;padding-bottom:33px;
+ background:linear-gradient(90deg,rgba(5,12,23,.89),rgba(8,16,29,.48) 75%,rgba(7,15,27,.20)),url("./phuket-classic-night.avif") center 69% / cover no-repeat;
+ border-bottom-color:#647a93;
+}
+:root[data-theme="classic"][data-scenic="true"] header h1{color:#f6f9ff;text-shadow:0 2px 17px rgba(0,0,0,.58)}
+:root[data-theme="classic"][data-scenic="true"] #hero-theme-tagline{display:block;color:#f0d59f}
+:root[data-theme="classic"][data-scenic="true"] article,
+:root[data-theme="classic"][data-scenic="true"] .panel{background:rgba(28,36,49,.94);box-shadow:0 10px 28px rgba(0,0,0,.18)}
+:root[data-theme] .theme-preview-classic{background:url("./phuket-classic-night.avif") center 66% / cover no-repeat}
+:root[data-theme] .theme-preview-sunset{background:url("./phuket-sunset-gold.avif") center 66% / cover no-repeat}
+@media(max-width:580px){
+ :root[data-theme="sunset"][data-scenic="true"] header{min-height:260px}
+ :root[data-theme="classic"][data-scenic="true"] header{min-height:258px}
+}
 </style><script src="./phuket-themes.js"></script></head><body><header><button id="theme-shortcut" class="theme-shortcut" type="button" aria-label="Выбрать скин приложения">◈ Скины</button><small>PHUKET · REAL ESTATE</small><h1>Phuket Broker Trainer</h1><p>Продажи недвижимости на Пхукете · русскоязычные покупатели</p><p id="hero-theme-tagline" aria-live="polite"></p></header><main class="shell"><nav><button id="tab-scripts" class="active">Сценарии</button><button id="tab-dialog">Диалог</button><button id="tab-branches">Ветвления</button><button id="tab-deal">Сделка</button><button id="tab-daily">10 минут</button><button id="tab-exam">Экзамен</button><button id="tab-stats">Прогресс</button><button id="tab-calc">Калькулятор</button><button id="tab-notes">Памятка</button><button id="tab-knowledge">База знаний</button><button id="tab-smm">SMM</button><button id="tab-themes">Скины</button></nav><section id="app"></section></main><footer>Учебный тренажёр. Инвестиционные и юридические сведения требуют независимой проверки.</footer><script src="./phuket-v2.js"></script><script src="./phuket-coach.js"></script><script src="./phuket-academy.js"></script><script src="./phuket-branches.js"></script><script src="./phuket-knowledge.js"></script><script src="./phuket-knowledge-ui.js"></script><script src="./phuket-smm.js"></script><script src="./phuket-smm-ui.js"></script><script>
 const scenarios=[["Первый контакт","Здравствуйте! Вы оставляли заявку по недвижимости на Пхукете. Меня зовут [имя], я брокер. Уточню цель покупки и бюджет, затем предложу подходящие объекты. Рассматриваете недвижимость для жизни, отдыха или инвестиций?","Какой бюджет закладываете на покупку с учётом оформления и когда планируете сделку?","Зафиксировать цель, бюджет и срок. Предложить три подходящих объекта и назначить конкретное время их разбора."],["Выявление цели","Чтобы сравнить объекты по подходящим критериям, расскажите, какого результата вы ждёте от покупки.","Как часто планируете приезжать? Рассматриваете сдачу в аренду?","Зафиксировать главную цель и критерии"],["Бюджет и расходы","Давайте определим комфортный бюджет с учётом не только цены, но и оформления и содержания.","В какой валюте удобнее сравнивать? Есть ли резерв на дополнительные расходы?","Согласовать диапазон полной стоимости"],["Банг Тао или Раваи","Эти районы отличаются инфраструктурой и образом жизни. Сравним их под вашу задачу, а не по общему рейтингу.","Что важнее: пляж, школы, кафе, спокойствие или аренда?","Предложить сравнительную подборку"],["Инвестиционный покупатель","Для инвестиции важно считать не рекламную доходность, а денежный поток после расходов и простоев.","Какой срок владения? Насколько важна ликвидность?","Подготовить несколько сценариев расчёта"],["Покупка для семьи","Для семейной покупки начнём с повседневной логистики, школ, медицины и удобства района.","Сколько человек будет жить? Нужна ли школа?","Составить список районов и объектов"],["Возражение: дорого","Понимаю. Давайте сравним не только стоимость квадратного метра, но и характеристики и полные расходы.","С какими объектами сравниваете? Что для вас принципиально?","Показать альтернативы и компромиссы"],["Опасение: застройщик","Проверка застройщика и документов — разумный этап до принятия решения.","Какие риски волнуют больше всего: сроки, качество или документы?","Согласовать независимую юридическую проверку"],["Обещают 12% доходности","Высокие проценты требуют проверки методики расчёта, расходов и условий договора.","Это прогноз или договорное обязательство? Учтены простои и налоги?","Запросить подтверждающие документы"],["Форма владения","Для иностранного покупателя форма владения зависит от типа недвижимости и условий проекта.","Рассматриваете кондоминиум или виллу?","Направить условия независимому юристу"],["Отправьте в WhatsApp","Конечно, отправлю. Чтобы не перегружать вариантами, уточню один критерий.","Что важнее: район, бюджет или назначение покупки?","Согласовать подборку и срок обратной связи"],["Назначение презентации","Предлагаю коротко сравнить 2–3 подходящих варианта с плюсами, ограничениями и расходами.","Удобнее видеозвонок или письменная подборка?","Назначить конкретный следующий контакт"]] .concat(PhuketV2.extra);const app=document.querySelector('#app');let persona='investor',turns=[],facts={},rec=null;let buyer=PhuketV2.create(persona),grades=[],branchState=PhuketBranches.create(),branchMode="training",examState=null,dealState=null;try{const saved=JSON.parse(localStorage.getItem('phuket-branch-v5')||'null');if(saved&&PhuketBranches.get(saved.node)&&PhuketBranches.roots.some(r=>r.id===saved.root)&&Array.isArray(saved.history)&&saved.history.length<=100){branchState=saved}}catch{}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
