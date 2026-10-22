@@ -257,6 +257,11 @@ for(const lesson of knowledge.lessons){
 }
 assert(knowledge.sourceNote.includes('их видеорасшифровки ещё не получены'));
 assert(html.includes('id="tab-knowledge"'));
+assert(html.includes('id="tab-smm"'));
+assert(html.includes('src="./phuket-smm.js"'));
+assert(html.includes('src="./phuket-smm-ui.js"'));
+assert(html.includes("if(t==='smm')PhuketSMMUI.renderList(app)"));
+assert(html.includes("'knowledge','smm'])document.getElementById('tab-'"));
 assert(html.includes('src="./phuket-knowledge.js"'));
 assert(html.includes('src="./phuket-knowledge-ui.js"'));
 assert(html.includes('PhuketKnowledgeUI.renderList(app)'));
@@ -280,3 +285,23 @@ assert(knowledge.lessons[14].facts.some(x=>x[0].includes('КРИТИЧЕСКОЕ
 assert(knowledge.lessons[14].facts.some(x=>x[0].includes('DTV')));
 assert(knowledge.lessons[14].facts.some(x=>x[0].includes('LTR')));
 console.log('OK: eleven transcript lessons, fifteen correctly numbered videos, 79 quizzes, offline cache');
+
+const smmSource=fs.readFileSync("phuket-smm.js","utf8");
+const smmUi=fs.readFileSync("phuket-smm-ui.js","utf8");
+new vm.Script(smmSource,{filename:"phuket-smm.js"});
+new vm.Script(smmUi,{filename:"phuket-smm-ui.js"});
+vm.runInContext(smmSource,context);
+vm.runInContext(smmUi,context);
+const smm=context.window.PhuketSMM;
+assert.equal(smm.lessons.length,6);
+assert.deepEqual(Array.from(smm.lessons,l=>l.step),[1,2,3,4,5,6]);
+assert.deepEqual(Array.from(smm.lessons,l=>l.video),["https://youtu.be/yMIe-4YHf1E","https://youtu.be/Wh1U2a71xKQ","https://youtu.be/3bHt67q783k","https://youtu.be/fPQzmdbXu-Q","https://youtu.be/nGgIhQzzNm4","https://youtu.be/ZMmHrhqN0E8"]);
+assert.deepEqual(Array.from(smm.lessons,l=>Boolean(l.videoAnalyzed)),[true,false,false,false,false,true]);
+assert.equal(smm.lessons.reduce((n,l)=>n+l.quiz.length,0),25);
+for(const l of smm.lessons){assert(l.facts.length>=5);assert(l.tasks.length===3);assert(l.template.length>20);assert(l.quiz.every(q=>q[1].length===3&&q[2]>=0&&q[2]<=2));}
+assert.equal(typeof context.window.PhuketSMMUI.renderList,"function");
+assert.equal(typeof context.window.PhuketSMMUI.renderDetail,"function");
+assert(smmUi.includes("phuket-smm-notes-v1"));
+assert(smmUi.includes("phuket-smm-results-v1"));
+assert(fs.readFileSync("sw.js","utf8").includes("'./phuket-smm-ui.js'"));
+console.log("OK: separate SMM course, six steps, 25 quizzes, assignments, saved notes and offline assets");
