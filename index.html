@@ -77,7 +77,7 @@ function loadRecords(){try{return JSON.parse(localStorage.getItem('phuket-record
 function addRecord(r){try{const a=loadRecords();a.push({...r,date:new Date().toISOString()});localStorage.setItem('phuket-records-v7',JSON.stringify(a.slice(-100)))}catch{}}
 function recordTraining(s){const p=PhuketBranches.progress(s);addRecord({type:'Ветвления',score:p.score,trust:p.trust,success:s.node==='end_good',turns:p.turns,root:s.root})}
 function exam(){
- if(!examState)examState={index:0,correct:0,order:PhuketAcademy.questions.map((_,i)=>i).sort(()=>Math.random()-.5),answers:[]};
+ if(!examState)examState={index:0,correct:0,order:PhuketAcademy.questions.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,20),answers:[]};
  const e=examState,q=PhuketAcademy.questions[e.order[e.index]];
  if(!q){app.innerHTML='<h2>Экзамен завершён</h2><article><h3>Результат: '+e.correct+' из '+e.order.length+'</h3><p>'+Math.round(e.correct/e.order.length*100)+'% правильных ответов</p><p>Ниже — темы для повторения:</p>'+e.answers.filter(x=>!x.ok).map(x=>'<p>'+esc(x.question)+' — '+esc(x.correct)+'</p>').join('')+'<button id="exam-again">Пройти ещё раз</button></article>';document.getElementById('exam-again').onclick=()=>{examState=null;exam()};return}
  app.innerHTML='<h2>Экзамен брокера</h2><p class="muted">20 вопросов без подсказок. Результат сохраняется на этом устройстве.</p><article><div class="category">Вопрос '+(e.index+1)+' из '+e.order.length+'</div><h3>'+esc(q[0])+'</h3>'+q[1].map((a,i)=>'<button class="exam-choice" data-exam="'+i+'">'+esc(a)+'</button>').join('')+'</article>';

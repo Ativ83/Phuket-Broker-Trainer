@@ -53,7 +53,7 @@ new vm.Script(branchJs,{filename:'phuket-branches.js'});
 vm.runInContext(fs.readFileSync('phuket-academy.js','utf8'),context);
 vm.runInContext(branchJs,context);
 const branches=context.window.PhuketBranches;
-assert.equal(branches.roots.length,28);
+assert.equal(branches.roots.length,38);
 assert(Object.keys(branches.nodes).length>=15);
 assert(html.includes('tab-branches'));
 assert(html.includes('src="./phuket-branches.js"'));
@@ -166,10 +166,11 @@ assert(html.includes('Что помнит клиент'));
 assert(html.includes('PhuketBranches.view(s)'));
 console.log('OK: conversation memory, varied repeat playthrough and trust-sensitive closing');
 
-assert.equal(context.window.PhuketAcademy.questions.length,20);
-assert.equal(context.window.PhuketAcademy.roots.length,24);
+assert.equal(context.window.PhuketAcademy.questions.length,28);
+assert.equal(context.window.PhuketAcademy.roots.length,34);
 assert(html.includes('src="./phuket-academy.js"'));
 assert(html.includes('id="tab-exam"'));
+assert(html.includes('.slice(0,20),answers:[]'),'Exam should choose 20 questions from the larger bank');
 assert(html.includes('id="tab-stats"'));
 assert(html.includes('id="tab-calc"'));
 assert(html.includes("function exam()"));
@@ -177,7 +178,9 @@ assert(html.includes("function calc()"));
 assert(html.includes("function stats()"));
 assert(html.includes("phuket-records-v7"));
 for(const q of context.window.PhuketAcademy.questions){assert.equal(q[1].length,3);assert(q[2]>=0&&q[2]<3)}
-console.log('OK: 24 new scenarios, 20 exam questions, stats and calculator');
+assert.deepEqual(Array.from(context.window.PhuketAcademy.roots.slice(-10),x=>x.id),['case25','case26','case27','case28','case29','case30','case31','case32','case33','case34']);
+assert(context.window.PhuketAcademy.questions.slice(-8).every(q=>q[1].length===3&&q[2]>=0&&q[2]<3));
+console.log('OK: 34 academy scenarios, 28-question bank and 20-question exam, stats and calculator');
 
 new vm.Script(fs.readFileSync('sw.js','utf8'),{filename:'sw.js'});
 new vm.Script(fs.readFileSync('phuket-academy.js','utf8'),{filename:'phuket-academy.js'});
