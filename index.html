@@ -75,8 +75,10 @@
  radial-gradient(ellipse at 9% 82%,rgba(172,79,124,.22),transparent 60%);
 }
 :root[data-theme="ocean"][data-scenic="true"] body::before{
- background:radial-gradient(ellipse at 45% -10%,rgba(30,159,201,.20),transparent 62%),
- radial-gradient(ellipse at 80% 100%,rgba(31,82,154,.22),transparent 70%);
+ background:
+ linear-gradient(180deg,rgba(5,20,41,.52),rgba(4,17,33,.85) 85%),
+ url("./phuket-business-ocean.avif") center 55% / cover no-repeat;
+ opacity:.95;
 }
 :root[data-theme]:not([data-theme="classic"]) header{
  position:relative;isolation:isolate;overflow:hidden;
@@ -94,7 +96,12 @@
  linear-gradient(120deg,#432a42,#955b55 68%,#a77865);
 }
 :root[data-theme="ocean"][data-scenic="true"] header{
- background:radial-gradient(ellipse at 85% 5%,rgba(56,158,187,.30),transparent 60%),linear-gradient(125deg,#0a2039,#195276);
+ min-height:290px;
+ padding-top:76px;
+ padding-bottom:33px;
+ background:
+ linear-gradient(90deg,rgba(6,21,39,.78),rgba(7,29,48,.45) 80%),
+ url("./phuket-business-ocean.avif") center 65% / cover no-repeat;
 }
 :root[data-theme]:not([data-theme="classic"]) header small{color:var(--skin-accent)}
 :root[data-theme]:not([data-theme="classic"]) h1{text-shadow:0 2px 22px rgba(0,0,0,.35)}
@@ -222,7 +229,7 @@
 }
 :root[data-theme] .theme-preview-classic{background:linear-gradient(120deg,#202c3d,#111720)}
 :root[data-theme] .theme-preview-thai{background:url("./phuket-paradise-photo.avif") center/cover}
-:root[data-theme] .theme-preview-ocean{background:linear-gradient(128deg,#0b2542,#18799a 80%,#69d7dc)}
+:root[data-theme] .theme-preview-ocean{background:url("./phuket-business-ocean.avif") center 63% / cover no-repeat}
 :root[data-theme] .theme-preview-sunset{background:radial-gradient(circle at 73% 25%,#ffd697 0%,#c16e72 25%,#442943 80%)}
 :root[data-theme] .theme-preview-head{
  position:absolute;left:13px;top:15px;width:50%;height:12px;border-radius:4px;
