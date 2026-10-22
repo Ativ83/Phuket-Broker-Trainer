@@ -83,7 +83,7 @@ branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);branches.step(
 assert.equal(branches.progress(flow).turns,4);
 console.log('OK: branching graph, 4 starts, all targets and outcomes');
 
-assert(html.includes("for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes'])"),'Branching tab must have click handler');
+assert(html.includes("for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge'])"),'Branching tab must have click handler');
 console.log('OK: branching tab click binding');
 
 assert(html.includes('branchMode="training"'),'Training mode must be default');
@@ -200,3 +200,25 @@ assert.equal(report.errors.length,1);
 assert.match(report.errors[0].better,/Для чего рассматриваете/);
 assert.match(report.focus,/давления/);
 console.log('OK: deal exam, daily practice and corrective feedback');
+
+const knowledgeJs=fs.readFileSync('phuket-knowledge.js','utf8');
+const knowledgeUi=fs.readFileSync('phuket-knowledge-ui.js','utf8');
+new vm.Script(knowledgeJs,{filename:'phuket-knowledge.js'});
+new vm.Script(knowledgeUi,{filename:'phuket-knowledge-ui.js'});
+vm.runInContext(knowledgeJs,context);
+const knowledge=context.window.PhuketKnowledge;
+assert.equal(knowledge.lessons.length,4);
+assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),10);
+for(const lesson of knowledge.lessons){
+ assert(lesson.video.startsWith('https://youtu.be/'));
+ assert(lesson.sources.length>0);
+ assert(lesson.facts.length>=3);
+ assert(lesson.quiz.every(q=>q[2]>=0&&q[2]<q[1].length));
+}
+assert(knowledge.sourceNote.includes('ещё не расшифровано'));
+assert(html.includes('id="tab-knowledge"'));
+assert(html.includes('src="./phuket-knowledge.js"'));
+assert(html.includes('src="./phuket-knowledge-ui.js"'));
+assert(html.includes('PhuketKnowledgeUI.renderList(app)'));
+assert(fs.readFileSync('sw.js','utf8').includes("'./phuket-knowledge-ui.js'"));
+console.log('OK: verified-source knowledge base, four video references, 10 quizzes, offline cache');
