@@ -6,24 +6,35 @@ try{progress=JSON.parse(localStorage.getItem("phuket-knowledge-progress-v1")||"{
 function save(){try{localStorage.setItem("phuket-knowledge-progress-v1",JSON.stringify(progress))}catch{}}
 function renderList(container){
  const k=window.PhuketKnowledge;
- container.innerHTML='<h2>База знаний · Таиланд</h2>'+
+ let content='<h2>База знаний · Таиланд</h2>'+
  '<p class="kb-notice">'+escapeHtml(k.sourceNote)+'</p>'+
- '<p class="muted">Шаг 1: «ЗАКОНОДАТЕЛЬСТВО и ПХУКЕТ». Официальные источники проверены: '+escapeHtml(k.checkedOn)+'.</p>'+
- k.lessons.map((l,i)=>'<article class="kb-card"><div class="category">Урок '+(i+1)+' · '+l.quiz.length+' вопроса</div><h3>'+escapeHtml(l.title)+'</h3>'+
- '<p>'+escapeHtml(l.summary)+'</p><p class="kb-video-status">Видео: расшифровка пока недоступна'+(progress[i]!==undefined?' · Лучший результат: '+progress[i]+'/'+l.quiz.length:' · Тест не пройден')+'</p>'+
- '<div class="actions"><button class="primary" data-kb-lesson="'+i+'">Изучить и проверить себя</button><a class="kb-video-link" href="'+escapeHtml(l.video)+'" target="_blank" rel="noopener noreferrer">Смотреть видео ↗</a></div></article>').join("");
+ '<p class="muted">Обучение по курсу: официальные источники, конспекты доступных видеозаписей и практические экзамены. Дата проверки материалов: '+escapeHtml(k.checkedOn)+'.</p>';
+ let previousStep=null;
+ k.lessons.forEach((l,i)=>{
+   if(l.step!==previousStep){
+     content+='<h3 class="kb-step-title">Шаг '+l.step+': «'+escapeHtml(l.stepTitle||"БАЗА ЗНАНИЙ")+'»</h3>';
+     previousStep=l.step;
+   }
+   const status=l.videoAnalyzed?'Видео: русская расшифровка изучена':'Видео: расшифровка пока не получена';
+   content+='<article class="kb-card"><div class="category">Урок '+l.number+' · '+l.quiz.length+' вопроса</div>'+
+   '<h3>'+escapeHtml(l.title)+'</h3><p>'+escapeHtml(l.summary)+'</p>'+
+   '<p class="kb-video-status">'+status+(progress[i]!==undefined?' · Лучший результат: '+progress[i]+'/'+l.quiz.length:' · Тест ещё не пройден')+'</p>'+
+   '<div class="actions"><button class="primary" data-kb-lesson="'+i+'">Изучить и проверить себя</button>'+
+   '<a class="kb-video-link" href="'+escapeHtml(l.video)+'" target="_blank" rel="noopener noreferrer">Смотреть урок '+l.number+' ↗</a></div></article>';
+ });
+ container.innerHTML=content;
  container.querySelectorAll("[data-kb-lesson]").forEach(b=>b.onclick=()=>renderDetail(container,Number(b.dataset.kbLesson)));
 }
 function renderDetail(container,i){
  const l=window.PhuketKnowledge.lessons[i];if(!l){renderList(container);return}
  const answered=new Set();let correct=0;
- container.innerHTML='<button id="kb-back">← К базе знаний</button><article class="kb-card"><div class="category">Урок '+(i+1)+' · Независимая справка</div><h2>'+escapeHtml(l.title)+'</h2>'+
- '<p class="kb-notice">Это не расшифровка видеоролика. Сведения получены из опубликованных официальных источников. Перед сделкой необходима проверка действующих правил и документов независимым специалистом в Таиланде.</p>'+
+ container.innerHTML='<button id="kb-back">← К базе знаний</button><article class="kb-card"><div class="category">Шаг '+l.step+' · Урок '+l.number+'</div><h2>'+escapeHtml(l.title)+'</h2>'+
+ '<p class="kb-notice">'+escapeHtml(l.videoAnalyzed?'Конспект по русскоязычной расшифровке обучающего ролика. Цифры, результаты сделок и обещания автора не являются подтверждёнными условиями продажи; дополнительно сверяйте источники, закон и договор.':'Это не расшифровка ролика. Сведения собраны отдельно по опубликованным источникам. Перед сделкой проверяйте действующие правила и документы с независимым специалистом в Таиланде.')+'</p>'+
  '<a class="kb-video-link" href="'+escapeHtml(l.video)+'" target="_blank" rel="noopener noreferrer">Открыть видео на YouTube ↗</a>'+
  '<p>'+escapeHtml(l.summary)+'</p>'+
  l.facts.map(f=>'<section class="kb-fact"><h3>'+escapeHtml(f[0])+'</h3><p>'+escapeHtml(f[1])+'</p></section>').join("")+
  '<section class="kb-speech"><div class="category">Как объяснить клиенту</div><p>'+escapeHtml(l.broker)+'</p></section>'+
- '<h3>Официальные источники</h3><ul>'+l.sources.map(x=>'<li><a href="'+escapeHtml(x[1])+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(x[0])+' ↗</a></li>').join("")+'</ul>'+
+ '<h3>Видео и источники для проверки</h3><ul>'+l.sources.map(x=>'<li><a href="'+escapeHtml(x[1])+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(x[0])+' ↗</a></li>').join("")+'</ul>'+
  '<h3>Проверь знания</h3>'+
  l.quiz.map((q,j)=>'<section class="kb-question" data-kb-question="'+j+'"><div class="category">Вопрос '+(j+1)+' из '+l.quiz.length+'</div><p><strong>'+escapeHtml(q[0])+'</strong></p>'+
  q[1].map((a,n)=>'<button class="kb-answer" data-kb-answer="'+j+'-'+n+'">'+escapeHtml(a)+'</button>').join("")+
