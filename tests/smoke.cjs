@@ -207,14 +207,16 @@ new vm.Script(knowledgeJs,{filename:'phuket-knowledge.js'});
 new vm.Script(knowledgeUi,{filename:'phuket-knowledge-ui.js'});
 vm.runInContext(knowledgeJs,context);
 const knowledge=context.window.PhuketKnowledge;
-assert.equal(knowledge.lessons.length,8);
-assert.deepEqual(Array.from(knowledge.lessons,l=>l.number),[1,2,3,4,9,10,15,16]);
-assert.deepEqual(Array.from(knowledge.lessons,l=>l.step),[1,1,1,1,4,4,6,6]);
+assert.equal(knowledge.lessons.length,10);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.number),[1,2,3,4,5,6,9,10,15,16]);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.step),[1,1,1,1,2,2,4,4,6,6]);
 assert.deepEqual(Array.from(knowledge.lessons,l=>l.title),[
  'Пхукет',
  'Формы собственности',
  'Процедура заключения сделки:',
  'Процедура заключения сделки:',
+ 'Типы недвижимости',
+ 'Виды недвижимости',
  'Форматы управления недвижимостью',
  'Арендные программы',
  'Капитализация и доходность на примере реальных кейсов',
@@ -225,13 +227,15 @@ assert.deepEqual(Array.from(knowledge.lessons,l=>l.video),[
  'https://youtu.be/FNtDBQaPTmA',
  'https://youtu.be/befMirUiHGU',
  'https://youtu.be/bcQMu_HnsW8',
+ 'https://youtu.be/gQLMeSDCxqQ',
+ 'https://youtu.be/BKIKKONw6CY',
  'https://youtu.be/574FFikQlpA',
  'https://youtu.be/fhSrvjgnCf8',
  'https://youtu.be/2vUCwVGUsbs',
  'https://youtu.be/nk5QUyjjX8g'
 ]);
-assert.deepEqual(Array.from(knowledge.lessons,l=>Boolean(l.videoAnalyzed)),[false,false,false,false,true,true,true,true]);
-assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),27);
+assert.deepEqual(Array.from(knowledge.lessons,l=>Boolean(l.videoAnalyzed)),[false,false,false,false,true,true,true,true,true,true]);
+assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),45);
 for(const lesson of knowledge.lessons){
  assert(lesson.video.startsWith('https://youtu.be/'));
  assert(lesson.sources.length>0);
@@ -244,9 +248,11 @@ assert(html.includes('src="./phuket-knowledge.js"'));
 assert(html.includes('src="./phuket-knowledge-ui.js"'));
 assert(html.includes('PhuketKnowledgeUI.renderList(app)'));
 assert(fs.readFileSync('sw.js','utf8').includes("'./phuket-knowledge-ui.js'"));
-assert(knowledge.lessons[7].facts.some(x=>x[1].includes('2024')));
-assert(knowledge.lessons[4].facts.some(x=>x[1].includes('5%')));
-assert(knowledge.lessons[5].facts.some(x=>x[1].includes('Hotel Act')));
+assert(knowledge.lessons[9].facts.some(x=>x[1].includes('2024')));
+assert(knowledge.lessons[6].facts.some(x=>x[1].includes('5%')));
+assert(knowledge.lessons[7].facts.some(x=>x[1].includes('Hotel Act')));
 assert(knowledgeUi.includes('kb-step-title'));
 assert(knowledgeUi.includes('l.number'));
-console.log('OK: four new transcript lessons, eight correctly numbered videos, 27 quizzes, offline cache');
+assert(knowledge.lessons[4].facts.some(x=>x[0].includes('Кондоминиум')));
+assert(knowledge.lessons[5].facts.some(x=>x[0].includes('Переуступка')));
+console.log('OK: six transcript lessons, ten correctly numbered videos, 45 quizzes, offline cache');
