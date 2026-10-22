@@ -8,7 +8,7 @@ const themes=[
  {id:"sunset",name:"Sunset Gold",label:"Золотой час на берегу",caption:"Тёплый закат, бронза, вдохновение",tagline:"Большие цели начинаются с ежедневного шага."}
 ];
 function normalize(value){
- const theme=themes.some(t=>t.id===value?.theme)?value.theme:"classic";
+ const theme=themes.some(t=>t.id===value?.theme)?value.theme:"thai";
  return {theme:theme,scenic:value?.scenic===false?false:true};
 }
 function getPreferences(){

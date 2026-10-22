@@ -58,7 +58,7 @@
  --skin-green:#39453d;--skin-green-border:#b1d99f;--skin-warm:#ffdcac;
 }
 :root[data-theme]:not([data-theme="classic"]) body{
- background:var(--skin-bg);color:var(--skin-text);
+ background:var(--skin-bg);color:var(--skin-text);isolation:isolate;min-height:100vh;
 }
 :root[data-theme]:not([data-theme="classic"]) body::before{
  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
