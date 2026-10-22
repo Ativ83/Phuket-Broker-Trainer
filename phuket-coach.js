@@ -18,7 +18,7 @@ function evaluate(text,state){
  const feedback=[];
  if(question)feedback.push('Есть уточняющий вопрос — это помогает выявить потребность.');else feedback.push('Добавьте открытый вопрос клиенту.');
  if(found.length)feedback.push('Вы затронули: '+found.map(k=>guides[k].title.toLowerCase()).join(', ')+'.');else feedback.push('Уточните цель, бюджет, район, сроки или опасения.');
- if(pressure)feedback.push('Избегайте давления и неподтверждённых гарантий.');
+ if(pressure)feedback.push('Не обещайте неподтверждённые условия; уверенно предложите следующий конкретный шаг.');
  if(value.length<45)feedback.push('Ответ можно сделать конкретнее.');
  return {score,feedback,found,pressure};
 }
