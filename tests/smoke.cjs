@@ -208,6 +208,18 @@ new vm.Script(knowledgeUi,{filename:'phuket-knowledge-ui.js'});
 vm.runInContext(knowledgeJs,context);
 const knowledge=context.window.PhuketKnowledge;
 assert.equal(knowledge.lessons.length,4);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.title),[
+ 'Пхукет',
+ 'Формы собственности',
+ 'Процедура заключения сделки:',
+ 'Процедура заключения сделки:'
+]);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.video),[
+ 'https://youtu.be/9tK4cXrw1jk',
+ 'https://youtu.be/FNtDBQaPTmA',
+ 'https://youtu.be/befMirUiHGU',
+ 'https://youtu.be/bcQMu_HnsW8'
+]);
 assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),11);
 for(const lesson of knowledge.lessons){
  assert(lesson.video.startsWith('https://youtu.be/'));
