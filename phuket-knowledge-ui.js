@@ -8,7 +8,7 @@ function renderList(container){
  const k=window.PhuketKnowledge;
  container.innerHTML='<h2>База знаний · Таиланд</h2>'+
  '<p class="kb-notice">'+escapeHtml(k.sourceNote)+'</p>'+
- '<p class="muted">Шаг 1 · Законодательство и Пхукет. Официальные источники проверены: '+escapeHtml(k.checkedOn)+'.</p>'+
+ '<p class="muted">Шаг 1: «ЗАКОНОДАТЕЛЬСТВО и ПХУКЕТ». Официальные источники проверены: '+escapeHtml(k.checkedOn)+'.</p>'+
  k.lessons.map((l,i)=>'<article class="kb-card"><div class="category">Урок '+(i+1)+' · '+l.quiz.length+' вопроса</div><h3>'+escapeHtml(l.title)+'</h3>'+
  '<p>'+escapeHtml(l.summary)+'</p><p class="kb-video-status">Видео: расшифровка пока недоступна'+(progress[i]!==undefined?' · Лучший результат: '+progress[i]+'/'+l.quiz.length:' · Тест не пройден')+'</p>'+
  '<div class="actions"><button class="primary" data-kb-lesson="'+i+'">Изучить и проверить себя</button><a class="kb-video-link" href="'+escapeHtml(l.video)+'" target="_blank" rel="noopener noreferrer">Смотреть видео ↗</a></div></article>').join("");
