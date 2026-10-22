@@ -53,7 +53,7 @@ new vm.Script(branchJs,{filename:'phuket-branches.js'});
 vm.runInContext(fs.readFileSync('phuket-academy.js','utf8'),context);
 vm.runInContext(branchJs,context);
 const branches=context.window.PhuketBranches;
-assert.equal(branches.roots.length,38);
+assert.equal(branches.roots.length,46);
 assert(Object.keys(branches.nodes).length>=15);
 assert(html.includes('tab-branches'));
 assert(html.includes('src="./phuket-branches.js"'));
@@ -166,8 +166,8 @@ assert(html.includes('Что помнит клиент'));
 assert(html.includes('PhuketBranches.view(s)'));
 console.log('OK: conversation memory, varied repeat playthrough and trust-sensitive closing');
 
-assert.equal(context.window.PhuketAcademy.questions.length,28);
-assert.equal(context.window.PhuketAcademy.roots.length,34);
+assert.equal(context.window.PhuketAcademy.questions.length,36);
+assert.equal(context.window.PhuketAcademy.roots.length,42);
 assert(html.includes('src="./phuket-academy.js"'));
 assert(html.includes('id="tab-exam"'));
 assert(html.includes('.slice(0,20),answers:[]'),'Exam should choose 20 questions from the larger bank');
@@ -178,9 +178,9 @@ assert(html.includes("function calc()"));
 assert(html.includes("function stats()"));
 assert(html.includes("phuket-records-v7"));
 for(const q of context.window.PhuketAcademy.questions){assert.equal(q[1].length,3);assert(q[2]>=0&&q[2]<3)}
-assert.deepEqual(Array.from(context.window.PhuketAcademy.roots.slice(-10),x=>x.id),['case25','case26','case27','case28','case29','case30','case31','case32','case33','case34']);
+assert.deepEqual(Array.from(context.window.PhuketAcademy.roots.slice(-10),x=>x.id),['case33','case34','case35','case36','case37','case38','case39','case40','case41','case42']);
 assert(context.window.PhuketAcademy.questions.slice(-8).every(q=>q[1].length===3&&q[2]>=0&&q[2]<3));
-console.log('OK: 34 academy scenarios, 28-question bank and 20-question exam, stats and calculator');
+console.log('OK: 42 academy scenarios, 36-question bank and 20-question exam, stats and calculator');
 
 new vm.Script(fs.readFileSync('sw.js','utf8'),{filename:'sw.js'});
 new vm.Script(fs.readFileSync('phuket-academy.js','utf8'),{filename:'phuket-academy.js'});
@@ -210,9 +210,9 @@ new vm.Script(knowledgeJs,{filename:'phuket-knowledge.js'});
 new vm.Script(knowledgeUi,{filename:'phuket-knowledge-ui.js'});
 vm.runInContext(knowledgeJs,context);
 const knowledge=context.window.PhuketKnowledge;
-assert.equal(knowledge.lessons.length,10);
-assert.deepEqual(Array.from(knowledge.lessons,l=>l.number),[1,2,3,4,5,6,9,10,15,16]);
-assert.deepEqual(Array.from(knowledge.lessons,l=>l.step),[1,1,1,1,2,2,4,4,6,6]);
+assert.equal(knowledge.lessons.length,14);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.number),[1,2,3,4,5,6,9,10,11,12,13,14,15,16]);
+assert.deepEqual(Array.from(knowledge.lessons,l=>l.step),[1,1,1,1,2,2,4,4,5,5,5,5,6,6]);
 assert.deepEqual(Array.from(knowledge.lessons,l=>l.title),[
  'Пхукет',
  'Формы собственности',
@@ -222,6 +222,10 @@ assert.deepEqual(Array.from(knowledge.lessons,l=>l.title),[
  'Виды недвижимости',
  'Форматы управления недвижимостью',
  'Арендные программы',
+ 'Налоги на недвижимость в Таиланде',
+ 'Документы, подтверждающие право собственности',
+ 'Право наследования в Таиланде',
+ 'Дополнительные расходы при приобретении недвижимости',
  'Капитализация и доходность на примере реальных кейсов',
  'Самые актуальные проекты 2024-2025 г.'
 ]);
@@ -234,11 +238,15 @@ assert.deepEqual(Array.from(knowledge.lessons,l=>l.video),[
  'https://youtu.be/BKIKKONw6CY',
  'https://youtu.be/574FFikQlpA',
  'https://youtu.be/fhSrvjgnCf8',
+ 'https://youtu.be/A3vgoMJKPKU',
+ 'https://youtu.be/wL3Qfwhb1D0',
+ 'https://youtu.be/OebeiDuUgvk',
+ 'https://youtu.be/-J6FQNX9pcw',
  'https://youtu.be/2vUCwVGUsbs',
  'https://youtu.be/nk5QUyjjX8g'
 ]);
-assert.deepEqual(Array.from(knowledge.lessons,l=>Boolean(l.videoAnalyzed)),[false,false,false,false,true,true,true,true,true,true]);
-assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),45);
+assert.deepEqual(Array.from(knowledge.lessons,l=>Boolean(l.videoAnalyzed)),[false,false,false,false,true,true,true,true,true,true,true,true,true,true]);
+assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),69);
 for(const lesson of knowledge.lessons){
  assert(lesson.video.startsWith('https://youtu.be/'));
  assert(lesson.sources.length>0);
@@ -251,11 +259,16 @@ assert(html.includes('src="./phuket-knowledge.js"'));
 assert(html.includes('src="./phuket-knowledge-ui.js"'));
 assert(html.includes('PhuketKnowledgeUI.renderList(app)'));
 assert(fs.readFileSync('sw.js','utf8').includes("'./phuket-knowledge-ui.js'"));
-assert(knowledge.lessons[9].facts.some(x=>x[1].includes('2024')));
+assert(knowledge.lessons[13].facts.some(x=>x[1].includes('2024')));
 assert(knowledge.lessons[6].facts.some(x=>x[1].includes('5%')));
 assert(knowledge.lessons[7].facts.some(x=>x[1].includes('Hotel Act')));
 assert(knowledgeUi.includes('kb-step-title'));
 assert(knowledgeUi.includes('l.number'));
 assert(knowledge.lessons[4].facts.some(x=>x[0].includes('Кондоминиум')));
 assert(knowledge.lessons[5].facts.some(x=>x[0].includes('Переуступка')));
-console.log('OK: six transcript lessons, ten correctly numbered videos, 45 quizzes, offline cache');
+for(let i=8;i<=11;i++)assert.equal(knowledge.lessons[i].step,5);
+assert(knowledge.lessons[8].facts.some(x=>x[1].includes('0,1%')));
+assert(knowledge.lessons[9].facts.some(x=>x[0].includes('Домовая книга')));
+assert(knowledge.lessons[10].facts.some(x=>x[0].includes('Завещание')));
+assert(knowledge.lessons[11].facts.some(x=>x[0].includes('Sinking fund')));
+console.log('OK: ten transcript lessons, fourteen correctly numbered videos, 69 quizzes, offline cache');
