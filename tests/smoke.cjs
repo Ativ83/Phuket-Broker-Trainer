@@ -83,7 +83,7 @@ branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);branches.step(
 assert.equal(branches.progress(flow).turns,4);
 console.log('OK: branching graph, 4 starts, all targets and outcomes');
 
-assert(html.includes("for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge','smm'])"),'Branching tab must have click handler');
+assert(html.includes("for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge','smm','themes'])"),'Branching tab must have click handler');
 console.log('OK: branching tab click binding');
 
 assert(html.includes('branchMode="training"'),'Training mode must be default');
@@ -305,3 +305,46 @@ assert(smmUi.includes("phuket-smm-notes-v1"));
 assert(smmUi.includes("phuket-smm-results-v1"));
 assert(fs.readFileSync("sw.js","utf8").includes("'./phuket-smm-ui.js'"));
 console.log("OK: separate SMM course, six steps, 25 quizzes, assignments, saved notes and offline assets");
+
+const themesJs=fs.readFileSync("phuket-themes.js","utf8");
+new vm.Script(themesJs,{filename:"phuket-themes.js"});
+const attrs={};
+const stubStore={};
+const fakeDoc={
+ documentElement:{setAttribute:(k,v)=>{attrs[k]=v}},
+ querySelector:()=>({setAttribute:()=>{}}),
+ getElementById:()=>null
+};
+const ctxThemes={window:{},document:fakeDoc,localStorage:{
+ getItem:k=>stubStore[k]||null,
+ setItem:(k,v)=>{stubStore[k]=v}
+}};
+vm.createContext(ctxThemes);
+vm.runInContext(themesJs,ctxThemes);
+const themeApi=ctxThemes.window.PhuketThemes;
+assert.deepEqual(Array.from(themeApi.themes,x=>x.id),["classic","thai","ocean","sunset"]);
+assert.equal(attrs["data-theme"],"classic");
+themeApi.setTheme("thai");
+assert.equal(attrs["data-theme"],"thai");
+assert.equal(themeApi.getPreferences().theme,"thai");
+themeApi.setScenic(false);
+assert.equal(attrs["data-scenic"],"false");
+assert.equal(themeApi.getPreferences().scenic,false);
+themeApi.setTheme("sunset");
+assert.equal(themeApi.getPreferences().scenic,false);
+themeApi.setTheme("invalid");
+assert.equal(attrs["data-theme"],"sunset");
+assert.equal(themeApi.storageKey,"phuket-trainer-appearance-v1");
+assert(html.includes('id="tab-themes"'));
+assert(html.includes('id="theme-shortcut"'));
+assert(html.includes('id="hero-theme-tagline"'));
+assert(html.includes('src="./phuket-themes.js"'));
+assert(html.includes("PhuketThemes.renderPicker(app)"));
+assert(html.includes("PhuketThemes.applySaved()"));
+assert(html.includes(".theme-picker-grid"));
+assert(html.includes('phuket-paradise.svg'));
+assert(fs.readFileSync("sw.js","utf8").includes("'./phuket-paradise.svg'"));
+assert(fs.readFileSync("phuket-paradise.svg","utf8").includes("<svg"));
+assert(fs.readFileSync("phuket-paradise.svg","utf8").includes("viewBox"));
+assert(!html.includes(oldNavAssertion="TRAP-NOT-MATCHED"));
+console.log("OK: four saved themes, accessible picker, scenic toggle, scenic SVG and offline caching");

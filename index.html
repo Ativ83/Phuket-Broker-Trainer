@@ -10,12 +10,270 @@
 
 .kb-step-title{margin:30px 0 14px;padding:13px 14px;border-left:5px solid #d7b77a;background:#303441;color:#f8dda8;font-size:23px;line-height:1.45;border-radius:8px}
 @media(max-width:390px){.kb-step-title{font-size:21px}}
- .smm-task{margin:22px 0;padding:17px;border:2px solid #5d7c8b;border-radius:14px;background:#233445} .smm-task h3{color:#d9eef8;margin-top:0}.smm-task li{margin-bottom:12px} .smm-task textarea{display:block;width:100%;resize:vertical;min-height:190px;margin:12px 0;padding:14px;color:#faf7f1;background:#161e2b;border:1px solid #8eabb8;border-radius:10px;font-size:19px;line-height:1.55} .smm-task label{display:block;font-weight:650;font-size:19px;margin-top:17px}#smm-save-state{font-size:17px;color:#d9eef8} </style></head><body><header><small>PHUKET · REAL ESTATE</small><h1>Phuket Broker Trainer</h1><p>Продажи недвижимости на Пхукете · русскоязычные покупатели</p></header><main class="shell"><nav><button id="tab-scripts" class="active">Сценарии</button><button id="tab-dialog">Диалог</button><button id="tab-branches">Ветвления</button><button id="tab-deal">Сделка</button><button id="tab-daily">10 минут</button><button id="tab-exam">Экзамен</button><button id="tab-stats">Прогресс</button><button id="tab-calc">Калькулятор</button><button id="tab-notes">Памятка</button><button id="tab-knowledge">База знаний</button><button id="tab-smm">SMM</button></nav><section id="app"></section></main><footer>Учебный тренажёр. Инвестиционные и юридические сведения требуют независимой проверки.</footer><script src="./phuket-v2.js"></script><script src="./phuket-coach.js"></script><script src="./phuket-academy.js"></script><script src="./phuket-branches.js"></script><script src="./phuket-knowledge.js"></script><script src="./phuket-knowledge-ui.js"></script><script src="./phuket-smm.js"></script><script src="./phuket-smm-ui.js"></script><script>
+ .smm-task{margin:22px 0;padding:17px;border:2px solid #5d7c8b;border-radius:14px;background:#233445} .smm-task h3{color:#d9eef8;margin-top:0}.smm-task li{margin-bottom:12px} .smm-task textarea{display:block;width:100%;resize:vertical;min-height:190px;margin:12px 0;padding:14px;color:#faf7f1;background:#161e2b;border:1px solid #8eabb8;border-radius:10px;font-size:19px;line-height:1.55} .smm-task label{display:block;font-weight:650;font-size:19px;margin-top:17px}#smm-save-state{font-size:17px;color:#d9eef8} 
+
+/* THEME ENGINE — tokens. Original classic stylesheet remains intact by default. */
+:root{
+ --skin-bg:#111720;--skin-surface:#202734;--skin-border:#424550;
+ --skin-text:#f3efe7;--skin-muted:#b4b7bd;--skin-accent:#d7b77a;
+ --skin-ink:#1b1c22;--skin-button:#252b37;--skin-button-text:#f6ead8;
+ --skin-input:#161d29;--skin-input-border:#5b606a;
+ --skin-notice:#30352d;--skin-fact:#303948;--skin-panel:#283342;
+ --skin-sea:#91bce7;--skin-chat-client:#263f52;--skin-chat-broker:#3d3625;
+ --skin-chat-client-border:#6db5d8;--skin-chat-broker-border:#e2ba6f;
+ --skin-green:#253d32;--skin-green-border:#6bd0a0;
+ --skin-warm:#f4d493;
+}
+:root[data-theme="thai"]{
+ color-scheme:dark;
+ --skin-bg:#091f2a;--skin-surface:#102f3b;--skin-border:#366b75;
+ --skin-text:#f2fcf8;--skin-muted:#c3e0df;--skin-accent:#f6ce84;
+ --skin-ink:#17333a;--skin-button:#174351;--skin-button-text:#f6fcf8;
+ --skin-input:#0b2734;--skin-input-border:#6a9ba3;
+ --skin-notice:#263d3a;--skin-fact:#173d4c;--skin-panel:#153b47;
+ --skin-sea:#6fd2d4;--skin-chat-client:#174c5c;--skin-chat-broker:#4a392e;
+ --skin-chat-client-border:#68ced2;--skin-chat-broker-border:#f2c78a;
+ --skin-green:#1a483e;--skin-green-border:#89dfbc;--skin-warm:#f6d499;
+}
+:root[data-theme="ocean"]{
+ color-scheme:dark;
+ --skin-bg:#081524;--skin-surface:#10273d;--skin-border:#345978;
+ --skin-text:#f1f7ff;--skin-muted:#c0d5e7;--skin-accent:#79d9dc;
+ --skin-ink:#0c293a;--skin-button:#1c3753;--skin-button-text:#f0f8ff;
+ --skin-input:#091e32;--skin-input-border:#547d98;
+ --skin-notice:#183a47;--skin-fact:#17354e;--skin-panel:#16314a;
+ --skin-sea:#8fdaff;--skin-chat-client:#18425c;--skin-chat-broker:#303951;
+ --skin-chat-client-border:#73c9e5;--skin-chat-broker-border:#a3b6f2;
+ --skin-green:#193d44;--skin-green-border:#74d7d4;--skin-warm:#bbebef;
+}
+:root[data-theme="sunset"]{
+ color-scheme:dark;
+ --skin-bg:#241726;--skin-surface:#38263b;--skin-border:#72506a;
+ --skin-text:#fff4ee;--skin-muted:#e6c6d1;--skin-accent:#ffd196;
+ --skin-ink:#4a2432;--skin-button:#543047;--skin-button-text:#fff5ed;
+ --skin-input:#2b2032;--skin-input-border:#a27790;
+ --skin-notice:#513a38;--skin-fact:#4a3047;--skin-panel:#422c44;
+ --skin-sea:#ffc68d;--skin-chat-client:#49344f;--skin-chat-broker:#523628;
+ --skin-chat-client-border:#d49bb5;--skin-chat-broker-border:#ffd19b;
+ --skin-green:#39453d;--skin-green-border:#b1d99f;--skin-warm:#ffdcac;
+}
+:root[data-theme]:not([data-theme="classic"]) body{
+ background:var(--skin-bg);color:var(--skin-text);
+}
+:root[data-theme]:not([data-theme="classic"]) body::before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+ background:radial-gradient(ellipse at 16% 12%,rgba(45,177,184,.22),transparent 54%),
+ radial-gradient(ellipse at 94% 65%,rgba(230,154,91,.10),transparent 60%);
+}
+:root[data-theme="thai"][data-scenic="true"] body::before{
+ background:linear-gradient(180deg,rgba(6,28,42,.64),rgba(4,30,38,.92) 78%),
+ url("./phuket-paradise.svg") center top / cover no-repeat;
+ opacity:.92;
+}
+:root[data-theme="sunset"][data-scenic="true"] body::before{
+ background:radial-gradient(ellipse at 85% 8%,rgba(254,152,87,.25),transparent 56%),
+ radial-gradient(ellipse at 9% 82%,rgba(172,79,124,.22),transparent 60%);
+}
+:root[data-theme="ocean"][data-scenic="true"] body::before{
+ background:radial-gradient(ellipse at 45% -10%,rgba(30,159,201,.20),transparent 62%),
+ radial-gradient(ellipse at 80% 100%,rgba(31,82,154,.22),transparent 70%);
+}
+:root[data-theme]:not([data-theme="classic"]) header{
+ position:relative;isolation:isolate;overflow:hidden;
+ background:linear-gradient(115deg,#133a4a,#162a3b);
+ border-bottom:2px solid var(--skin-border);color:var(--skin-text);
+}
+:root[data-theme="thai"][data-scenic="true"] header{
+ min-height:280px;display:flex;flex-direction:column;justify-content:center;
+ padding-top:74px;padding-bottom:35px;
+ background:linear-gradient(90deg,rgba(3,23,37,.84),rgba(6,36,48,.42) 67%,rgba(6,35,48,.26)),
+ url("./phuket-paradise.svg") center 50% / cover no-repeat;
+}
+:root[data-theme="sunset"][data-scenic="true"] header{
+ background:radial-gradient(circle at 85% 30%,rgba(252,164,101,.72),transparent 33%),
+ linear-gradient(120deg,#432a42,#955b55 68%,#a77865);
+}
+:root[data-theme="ocean"][data-scenic="true"] header{
+ background:radial-gradient(ellipse at 85% 5%,rgba(56,158,187,.30),transparent 60%),linear-gradient(125deg,#0a2039,#195276);
+}
+:root[data-theme]:not([data-theme="classic"]) header small{color:var(--skin-accent)}
+:root[data-theme]:not([data-theme="classic"]) h1{text-shadow:0 2px 22px rgba(0,0,0,.35)}
+:root[data-theme]:not([data-theme="classic"]) .muted,
+:root[data-theme]:not([data-theme="classic"]) footer,
+:root[data-theme]:not([data-theme="classic"]) .small{color:var(--skin-muted)}
+:root[data-theme]:not([data-theme="classic"]) article,
+:root[data-theme]:not([data-theme="classic"]) .panel{
+ background:var(--skin-surface);border-color:var(--skin-border);
+ box-shadow:0 10px 34px rgba(0,0,0,.18);
+}
+:root[data-theme]:not([data-theme="classic"]) button{
+ background:var(--skin-button);color:var(--skin-button-text);border-color:var(--skin-border);
+}
+:root[data-theme]:not([data-theme="classic"]) button.active,
+:root[data-theme]:not([data-theme="classic"]) button.primary,
+:root[data-theme]:not([data-theme="classic"]) .primary{
+ background:var(--skin-accent);color:var(--skin-ink);border-color:var(--skin-accent);font-weight:750;
+}
+:root[data-theme]:not([data-theme="classic"]) button:focus-visible,
+:root[data-theme]:not([data-theme="classic"]) select:focus-visible,
+:root[data-theme]:not([data-theme="classic"]) textarea:focus-visible,
+:root[data-theme]:not([data-theme="classic"]) input:focus-visible{
+ outline:3px solid var(--skin-accent);outline-offset:3px;
+}
+:root[data-theme]:not([data-theme="classic"]) .category,
+:root[data-theme]:not([data-theme="classic"]) .kb-video-status{color:var(--skin-accent)}
+:root[data-theme]:not([data-theme="classic"]) select,
+:root[data-theme]:not([data-theme="classic"]) textarea,
+:root[data-theme]:not([data-theme="classic"]) input,
+:root[data-theme]:not([data-theme="classic"]) .calc-input,
+:root[data-theme]:not([data-theme="classic"]) .smm-task textarea{
+ background:var(--skin-input)!important;color:var(--skin-text)!important;
+ border-color:var(--skin-input-border)!important;
+}
+:root[data-theme]:not([data-theme="classic"]) .dialog-notice,
+:root[data-theme]:not([data-theme="classic"]) .kb-notice{
+ background:var(--skin-notice);color:var(--skin-text);border-left-color:var(--skin-accent);
+}
+:root[data-theme]:not([data-theme="classic"]) .kb-fact,
+:root[data-theme]:not([data-theme="classic"]) .kb-step-title{
+ background:var(--skin-fact);color:var(--skin-text);border-left-color:var(--skin-sea);
+}
+:root[data-theme]:not([data-theme="classic"]) .kb-video-link{
+ color:var(--skin-accent);border-color:var(--skin-accent);
+}
+:root[data-theme]:not([data-theme="classic"]) .kb-speech,
+:root[data-theme]:not([data-theme="classic"]) .coach-panel,
+:root[data-theme]:not([data-theme="classic"]) .calc-result,
+:root[data-theme]:not([data-theme="classic"]) .review-good{
+ background:var(--skin-green);border-color:var(--skin-green-border);
+}
+:root[data-theme]:not([data-theme="classic"]) .coach-panel .hint-text{color:var(--skin-text)}
+:root[data-theme]:not([data-theme="classic"]) .chat .bubble.client{
+ background:var(--skin-chat-client);border-color:var(--skin-chat-client-border);
+}
+:root[data-theme]:not([data-theme="classic"]) .chat .bubble.me{
+ background:var(--skin-chat-broker);border-color:var(--skin-chat-broker-border);
+}
+:root[data-theme]:not([data-theme="classic"]) .dialog-status{
+ background:var(--skin-chat-broker);color:var(--skin-warm);border-color:var(--skin-chat-broker-border);
+}
+:root[data-theme]:not([data-theme="classic"]) .speaker-label{color:var(--skin-sea)}
+:root[data-theme]:not([data-theme="classic"]) .bubble.me .speaker-label{color:var(--skin-warm)}
+:root[data-theme]:not([data-theme="classic"]) .kb-answer,
+:root[data-theme]:not([data-theme="classic"]) .deal-choice,
+:root[data-theme]:not([data-theme="classic"]) .exam-choice{border-color:var(--skin-border)}
+:root[data-theme]:not([data-theme="classic"]) .kb-answer.kb-correct{
+ background:#20523d;color:#fff;border-color:#69d5a2;
+}
+:root[data-theme]:not([data-theme="classic"]) .smm-task{
+ background:var(--skin-panel);border-color:var(--skin-border);
+}
+:root[data-theme]:not([data-theme="classic"]) .smm-task h3,
+:root[data-theme]:not([data-theme="classic"]) #smm-save-state{color:var(--skin-text)}
+:root[data-theme]:not([data-theme="classic"]) .hint-text{color:var(--skin-text)}
+:root[data-theme]:not([data-theme="classic"]) .kb-good,
+:root[data-theme]:not([data-theme="classic"]) .kb-final{color:#aeffcf}
+:root[data-theme]:not([data-theme="classic"]) .kb-review{color:#ffdfa5}
+:root[data-theme]:not([data-theme="classic"]) .branch-best{
+ background:#174d41!important;color:#eafff3!important;border:2px solid #8ce8bc!important;
+}
+:root[data-theme] .theme-shortcut{
+ position:absolute;right:clamp(14px,3vw,36px);top:18px;min-height:44px;
+ padding:8px 16px;border-radius:999px;background:rgba(7,25,37,.73);
+ border:1px solid rgba(246,223,171,.72);color:#fff1c9;font-size:16px;font-weight:750;
+ backdrop-filter:blur(6px);z-index:2;
+}
+:root[data-theme] header{position:relative}
+:root[data-theme] header h1{max-width:calc(100% - 25px);line-height:1.15}
+:root[data-theme] #hero-theme-tagline{
+ display:none;font-size:18px;line-height:1.5;
+ max-width:600px;margin:12px 0 0;color:#fff1d5;font-weight:650;
+ text-shadow:0 2px 8px rgba(1,11,16,.65);
+}
+:root[data-theme="thai"] #hero-theme-tagline,
+:root[data-theme="ocean"] #hero-theme-tagline,
+:root[data-theme="sunset"] #hero-theme-tagline{display:block}
+:root[data-theme="classic"] .theme-shortcut{
+ background:#283341;color:#f6e8ca;border-color:#766b55;
+}
+:root[data-theme] .theme-intro{
+ padding:23px 21px;margin:8px 0 21px;border-radius:20px;
+ background:linear-gradient(135deg,var(--skin-surface),var(--skin-panel));
+ border:1px solid var(--skin-border);
+}
+:root[data-theme] .theme-intro h2{margin:7px 0;font-size:28px}
+:root[data-theme] .theme-intro p{margin:9px 0 0}
+:root[data-theme] .theme-picker-grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;
+}
+:root[data-theme] button.theme-option{
+ display:flex;flex-direction:column;text-align:left;align-items:stretch;
+ min-height:270px;padding:11px;border:2px solid var(--skin-border);
+ border-radius:20px;background:var(--skin-surface);color:var(--skin-text);
+}
+:root[data-theme] button.theme-option.is-selected{
+ border:3px solid var(--skin-accent);background:var(--skin-panel);
+ box-shadow:0 0 0 2px rgba(251,229,164,.14),0 14px 25px rgba(0,0,0,.15);
+}
+:root[data-theme] .theme-preview{
+ position:relative;display:block;width:100%;height:125px;overflow:hidden;
+ border-radius:13px;border:1px solid rgba(255,255,255,.16);
+ background:linear-gradient(135deg,#222b38,#161d29);
+}
+:root[data-theme] .theme-preview-classic{background:linear-gradient(120deg,#202c3d,#111720)}
+:root[data-theme] .theme-preview-thai{background:url("./phuket-paradise.svg") center/cover}
+:root[data-theme] .theme-preview-ocean{background:linear-gradient(128deg,#0b2542,#18799a 80%,#69d7dc)}
+:root[data-theme] .theme-preview-sunset{background:radial-gradient(circle at 73% 25%,#ffd697 0%,#c16e72 25%,#442943 80%)}
+:root[data-theme] .theme-preview-head{
+ position:absolute;left:13px;top:15px;width:50%;height:12px;border-radius:4px;
+ background:rgba(255,248,223,.85);box-shadow:0 16px 0 -3px rgba(250,249,233,.55);
+}
+:root[data-theme] .theme-preview-card{
+ position:absolute;left:12px;right:12px;bottom:10px;height:40px;border-radius:8px;
+ background:rgba(13,28,42,.77);display:flex;align-items:center;gap:6px;padding:7px;
+ backdrop-filter:blur(4px);
+}
+:root[data-theme] .theme-preview-card span{height:15px;flex:1;border-radius:3px;background:rgba(249,216,155,.8)}
+:root[data-theme] .theme-preview-card span:nth-child(2){background:rgba(238,247,248,.75);flex:1.7}
+:root[data-theme] .theme-option-text{display:flex;flex-direction:column;gap:3px;margin-top:12px;line-height:1.35}
+:root[data-theme] .theme-option-text strong{font-size:21px}
+:root[data-theme] .theme-option-text>span{font-size:17px}
+:root[data-theme] .theme-option-text small{font-size:14px;color:var(--skin-muted)}
+:root[data-theme] .theme-selection{
+ margin-top:auto;padding-top:9px;font-size:16px;font-weight:750;color:var(--skin-accent);
+}
+:root[data-theme] .theme-setting-panel{
+ margin-top:22px;padding:19px;border-radius:16px;
+ border:1px solid var(--skin-border);background:var(--skin-surface);
+}
+:root[data-theme] .theme-setting-panel h3{margin-top:0}
+:root[data-theme] .theme-setting-actions{display:flex;gap:12px;flex-wrap:wrap}
+:root[data-theme] .theme-setting-actions button{flex:1;min-width:120px}
+:root[data-theme][data-scenic="false"] body::before{display:none}
+:root[data-theme="thai"][data-scenic="false"] header{
+ min-height:unset;display:block;padding:35px 20px 22px;
+ background:linear-gradient(135deg,#194b55,#092b3c);
+}
+:root[data-theme="sunset"][data-scenic="false"] header{background:linear-gradient(130deg,#42283d,#39263c)}
+:root[data-theme="ocean"][data-scenic="false"] header{background:linear-gradient(130deg,#102941,#122c45)}
+@media(max-width:580px){
+ :root[data-theme] .theme-picker-grid{grid-template-columns:1fr}
+ :root[data-theme] button.theme-option{min-height:230px}
+ :root[data-theme] .theme-preview{height:105px}
+ :root[data-theme="thai"][data-scenic="true"] header{min-height:255px;padding-top:75px}
+ :root[data-theme] header h1{font-size:31px}
+ :root[data-theme] .theme-shortcut{font-size:15px;padding:7px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+ :root[data-theme] *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
+
+</style><script src="./phuket-themes.js"></script></head><body><header><button id="theme-shortcut" class="theme-shortcut" type="button" aria-label="Выбрать скин приложения">◈ Скины</button><small>PHUKET · REAL ESTATE</small><h1>Phuket Broker Trainer</h1><p>Продажи недвижимости на Пхукете · русскоязычные покупатели</p><p id="hero-theme-tagline" aria-live="polite"></p></header><main class="shell"><nav><button id="tab-scripts" class="active">Сценарии</button><button id="tab-dialog">Диалог</button><button id="tab-branches">Ветвления</button><button id="tab-deal">Сделка</button><button id="tab-daily">10 минут</button><button id="tab-exam">Экзамен</button><button id="tab-stats">Прогресс</button><button id="tab-calc">Калькулятор</button><button id="tab-notes">Памятка</button><button id="tab-knowledge">База знаний</button><button id="tab-smm">SMM</button><button id="tab-themes">Скины</button></nav><section id="app"></section></main><footer>Учебный тренажёр. Инвестиционные и юридические сведения требуют независимой проверки.</footer><script src="./phuket-v2.js"></script><script src="./phuket-coach.js"></script><script src="./phuket-academy.js"></script><script src="./phuket-branches.js"></script><script src="./phuket-knowledge.js"></script><script src="./phuket-knowledge-ui.js"></script><script src="./phuket-smm.js"></script><script src="./phuket-smm-ui.js"></script><script>
 const scenarios=[["Первый контакт","Здравствуйте! Вы оставляли заявку по недвижимости на Пхукете. Меня зовут [имя], я брокер. Уточню цель покупки и бюджет, затем предложу подходящие объекты. Рассматриваете недвижимость для жизни, отдыха или инвестиций?","Какой бюджет закладываете на покупку с учётом оформления и когда планируете сделку?","Зафиксировать цель, бюджет и срок. Предложить три подходящих объекта и назначить конкретное время их разбора."],["Выявление цели","Чтобы сравнить объекты по подходящим критериям, расскажите, какого результата вы ждёте от покупки.","Как часто планируете приезжать? Рассматриваете сдачу в аренду?","Зафиксировать главную цель и критерии"],["Бюджет и расходы","Давайте определим комфортный бюджет с учётом не только цены, но и оформления и содержания.","В какой валюте удобнее сравнивать? Есть ли резерв на дополнительные расходы?","Согласовать диапазон полной стоимости"],["Банг Тао или Раваи","Эти районы отличаются инфраструктурой и образом жизни. Сравним их под вашу задачу, а не по общему рейтингу.","Что важнее: пляж, школы, кафе, спокойствие или аренда?","Предложить сравнительную подборку"],["Инвестиционный покупатель","Для инвестиции важно считать не рекламную доходность, а денежный поток после расходов и простоев.","Какой срок владения? Насколько важна ликвидность?","Подготовить несколько сценариев расчёта"],["Покупка для семьи","Для семейной покупки начнём с повседневной логистики, школ, медицины и удобства района.","Сколько человек будет жить? Нужна ли школа?","Составить список районов и объектов"],["Возражение: дорого","Понимаю. Давайте сравним не только стоимость квадратного метра, но и характеристики и полные расходы.","С какими объектами сравниваете? Что для вас принципиально?","Показать альтернативы и компромиссы"],["Опасение: застройщик","Проверка застройщика и документов — разумный этап до принятия решения.","Какие риски волнуют больше всего: сроки, качество или документы?","Согласовать независимую юридическую проверку"],["Обещают 12% доходности","Высокие проценты требуют проверки методики расчёта, расходов и условий договора.","Это прогноз или договорное обязательство? Учтены простои и налоги?","Запросить подтверждающие документы"],["Форма владения","Для иностранного покупателя форма владения зависит от типа недвижимости и условий проекта.","Рассматриваете кондоминиум или виллу?","Направить условия независимому юристу"],["Отправьте в WhatsApp","Конечно, отправлю. Чтобы не перегружать вариантами, уточню один критерий.","Что важнее: район, бюджет или назначение покупки?","Согласовать подборку и срок обратной связи"],["Назначение презентации","Предлагаю коротко сравнить 2–3 подходящих варианта с плюсами, ограничениями и расходами.","Удобнее видеозвонок или письменная подборка?","Назначить конкретный следующий контакт"]] .concat(PhuketV2.extra);const app=document.querySelector('#app');let persona='investor',turns=[],facts={},rec=null;let buyer=PhuketV2.create(persona),grades=[],branchState=PhuketBranches.create(),branchMode="training",examState=null,dealState=null;try{const saved=JSON.parse(localStorage.getItem('phuket-branch-v5')||'null');if(saved&&PhuketBranches.get(saved.node)&&PhuketBranches.roots.some(r=>r.id===saved.root)&&Array.isArray(saved.history)&&saved.history.length<=100){branchState=saved}}catch{}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function stop(){try{rec?.abort()}catch{}rec=null;try{speechSynthesis.cancel()}catch{}}
 function speak(t){if(!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='ru-RU';u.rate=.92;speechSynthesis.speak(u)}catch{}}
-function tab(t){stop();for(const k of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge','smm'])document.getElementById('tab-'+k).classList.toggle('active',k===t);if(t==='knowledge')PhuketKnowledgeUI.renderList(app);if(t==='smm')PhuketSMMUI.renderList(app);if(t==='scripts')list();if(t==='dialog')dialog();if(t==='notes')notes();if(t==='branches')branches();if(t==='deal')deal();if(t==='daily')daily();if(t==='exam')exam();if(t==='stats')stats();if(t==='calc')calc()}
+function tab(t){stop();for(const k of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge','smm','themes'])document.getElementById('tab-'+k).classList.toggle('active',k===t);if(t==='knowledge')PhuketKnowledgeUI.renderList(app);if(t==='smm')PhuketSMMUI.renderList(app);if(t==='themes')PhuketThemes.renderPicker(app);if(t==='scripts')list();if(t==='dialog')dialog();if(t==='notes')notes();if(t==='branches')branches();if(t==='deal')deal();if(t==='daily')daily();if(t==='exam')exam();if(t==='stats')stats();if(t==='calc')calc()}
 function list(query=''){app.innerHTML='<h2>Сценарии Пхукета</h2><p class="muted">40 консультационных скриптов. Поиск по теме и тексту.</p><input id="scriptsearch" type="search" placeholder="Поиск: скидка, юрист, Банг Тао…" aria-label="Поиск сценариев" value="'+esc(query)+'" style="width:100%;padding:13px;background:#161d29;color:white;border:1px solid #5b606a;border-radius:12px">'+scenarios.map((s,i)=>'<article data-script="'+i+'"><div class="category">Сценарий '+(i+1)+'</div><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><button data-i="'+i+'">Открыть</button></article>').join('');app.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>detail(+b.dataset.i));const search=document.getElementById('scriptsearch');search.oninput=()=>{const q=search.value.toLocaleLowerCase('ru').replace(/ё/g,'е');app.querySelectorAll('[data-script]').forEach(el=>{const s=scenarios[+el.dataset.script];el.hidden=!s.join(' ').toLocaleLowerCase('ru').replace(/ё/g,'е').includes(q)})};search.dispatchEvent(new Event('input'))}
 function detail(i){const s=scenarios[i];app.innerHTML='<button id="back">← Все сценарии</button><article><div class="category">Сценарий '+(i+1)+'</div><h2>'+esc(s[0])+'</h2><h3>Рекомендуемая формулировка</h3><div class="bubble">'+esc(s[1])+'</div><button id="listen">Прослушать</button><h3>Уточняющий вопрос</h3><div class="bubble">'+esc(s[2])+'</div><h3>Следующий шаг</h3><p>'+esc(s[3])+'</p><button id="practice" class="primary">Отработать с клиентом</button></article>';document.getElementById('back').onclick=list;document.getElementById('listen').onclick=()=>speak(s[1]);document.getElementById('practice').onclick=()=>{turns=[];facts={};buyer=PhuketV2.create(persona);tab('dialog')}}
 const topics=[['goal',/для чего|цель|инвестиц|сдава|прожива|отдых/,'Скорее для инвестиций, но иногда будем приезжать сами.'],['budget',/бюджет|сумм|ценов|сколько.*(готов|рассчитыва)/,'Рассматриваю примерно 10–12 миллионов рублей, но хочу понимать все расходы.'],['area',/район|локац|пляж|инфраструктур|банг тао|раваи/,'Пока выбираю между Банг Тао и Раваи. В чём разница для инвестора?'],['term',/срок|когда.*(покуп|решен)|как скоро/,'Могу принять решение в ближайшие месяцы, если найду понятный вариант.'],['risk',/риск|опасен|беспоко|смуща|сомнен|довер/,'Беспокоят документы и слишком оптимистичные обещания доходности.']];
@@ -95,6 +353,6 @@ function calc(){
  app.querySelectorAll('.calc-input').forEach(x=>x.oninput=update);update();
 }
 function notes(){app.innerHTML='<article><h2>Памятка брокера</h2><ul><li>Сначала уточняйте цель, бюджет, сроки и отношение к рискам.</li><li>Сравнивайте районы под конкретный образ жизни покупателя.</li><li>Показывайте полную стоимость владения, управление, налоги и возможные простои.</li><li>Не обещайте гарантированную доходность без документального основания.</li><li>Правила владения кондоминиумом и землёй иностранцами различаются.</li><li>Документы и договор должен проверять независимый специалист в Таиланде.</li><li>Ведите разговор уверенно: уточните потребность, покажите ценность и предложите конкретный следующий шаг без выдуманной срочности.</li></ul></article>'}
-for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge','smm'])document.getElementById('tab-'+t).onclick=()=>tab(t);tab('scripts');
+for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes','knowledge','smm','themes'])document.getElementById('tab-'+t).onclick=()=>tab(t);document.getElementById('theme-shortcut').onclick=()=>tab('themes');PhuketThemes.applySaved();tab('scripts');
 if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script></body></html>
