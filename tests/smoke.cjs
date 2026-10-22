@@ -83,7 +83,7 @@ branches.step(flow,0);branches.step(flow,0);branches.step(flow,0);branches.step(
 assert.equal(branches.progress(flow).turns,4);
 console.log('OK: branching graph, 4 starts, all targets and outcomes');
 
-assert(html.includes("for(const t of ['scripts','dialog','branches','exam','stats','calc','notes'])"),'Branching tab must have click handler');
+assert(html.includes("for(const t of ['scripts','dialog','branches','deal','daily','exam','stats','calc','notes'])"),'Branching tab must have click handler');
 console.log('OK: branching tab click binding');
 
 assert(html.includes('branchMode="training"'),'Training mode must be default');
@@ -186,3 +186,17 @@ assert.equal(manifest.display,'standalone');
 assert(html.includes('rel="manifest"'));
 assert(html.includes("serviceWorker.register('./sw.js')"));
 console.log('OK: offline PWA manifest and service worker');
+
+assert(html.includes('id="tab-deal"'));
+assert(html.includes('id="tab-daily"'));
+assert(html.includes('function deal()'));
+assert(html.includes('function daily()'));
+assert(html.includes('Экзамен на полную сделку'));
+assert(html.includes('Ежедневная тренировка · 10 минут'));
+assert(html.includes('PhuketBranches.review(s).errors'));
+const reviewed=branches.create('first');branches.step(reviewed,1);
+const report=branches.review(reviewed);
+assert.equal(report.errors.length,1);
+assert.match(report.errors[0].better,/Для чего рассматриваете/);
+assert.match(report.focus,/давления/);
+console.log('OK: deal exam, daily practice and corrective feedback');
