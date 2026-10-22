@@ -253,7 +253,7 @@ for(const lesson of knowledge.lessons){
  assert(lesson.facts.length>=3);
  assert(lesson.quiz.every(q=>q[2]>=0&&q[2]<q[1].length));
 }
-assert(knowledge.sourceNote.includes('расшифровки этих роликов ещё не получены'));
+assert(knowledge.sourceNote.includes('их видеорасшифровки ещё не получены'));
 assert(html.includes('id="tab-knowledge"'));
 assert(html.includes('src="./phuket-knowledge.js"'));
 assert(html.includes('src="./phuket-knowledge-ui.js"'));
