@@ -208,7 +208,7 @@ new vm.Script(knowledgeUi,{filename:'phuket-knowledge-ui.js'});
 vm.runInContext(knowledgeJs,context);
 const knowledge=context.window.PhuketKnowledge;
 assert.equal(knowledge.lessons.length,4);
-assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),10);
+assert.equal(knowledge.lessons.reduce((sum,l)=>sum+l.quiz.length,0),11);
 for(const lesson of knowledge.lessons){
  assert(lesson.video.startsWith('https://youtu.be/'));
  assert(lesson.sources.length>0);
@@ -221,4 +221,4 @@ assert(html.includes('src="./phuket-knowledge.js"'));
 assert(html.includes('src="./phuket-knowledge-ui.js"'));
 assert(html.includes('PhuketKnowledgeUI.renderList(app)'));
 assert(fs.readFileSync('sw.js','utf8').includes("'./phuket-knowledge-ui.js'"));
-console.log('OK: verified-source knowledge base, four video references, 10 quizzes, offline cache');
+console.log('OK: verified-source knowledge base, four video references, 11 quizzes, offline cache');
